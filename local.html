@@ -769,7 +769,7 @@
   <script src="./blocks/blocks/telemetry.js"></script>
   <script src="./blocks/blocks/vars.js"></script>
   <xml id="toolbox" style="display: none">
-    <category css-icon="customIcon fa fa-long-arrow-right" name="LinearOpMode" colour="30">
+    <category css-icon="customIcon fa fa-long-arrow-right" name="LinearOpMode" colour="#987654">
       <block type="linearOpMode_waitForStart"></block>
       <block type="linearOpMode_idle"></block>
       <block type="linearOpMode_sleep_Number">
@@ -5292,40 +5292,29 @@
     window.addEventListener("gamepadconnected", (event) => {
       if (event.gamepad.index < 2) {
         document.getElementById("telemetryText").innerText = 'New Controller: "' + event.gamepad.id + '".\nSet Controller to gamepad' + (event.gamepad.index + 1) + ".";
+		JSONNav.gamepads[event.gamepad.index] = JSON.parse('{"id": "' + navigator.getGamepads()[event.gamepad.index].id + '", "buttons": [], "axes": []}');
       }
     });
 
     window.addEventListener("gamepaddisconnected", (event) => {
       if (event.gamepad.index < 2) {
         document.getElementById("telemetryText").innerText = 'Controller disconnected: "' + event.gamepad.id + '".\nGamepad' + (event.gamepad.index + 1) + " lost.";
+		JSONNav.gamepads[event.gamepad.index] = null;
       }
     });
 
     var isUsingBlocks = true;
-    var delayTime = 0;
-    // var motorEncoderBaseValues = { "m1": 0.0, "m2": 0.0, "m3": 0.0, "m4": 0.0, "m5": 0.0, "m6": 0.0, "m7": 0.0, "m8": 0.0 };
-    // // TODO: THESE TWO VALUES (ENCBASE, REVERSE) NEED TO BE STORED IN LOCALSTORAGE
-    // var motorReverseValues = { "m1": 1.0, "m2": 1.0, "m3": 1.0, "m4": 1.0, "m5": 1.0, "m6": 1.0, "m7": 1.0, "m8": 1.0 };
 
     resetSendableMotorProperties();
     function resetSendableMotorProperties() {
-      var zeroValues = { "m1": 0.0, "m2": 0.0, "m3": 0.0, "m4": 0.0, "m5": 0.0, "m6": 0.0, "m7": 0.0, "m8": 0.0 };
-      var directions = { "m1": 'FORWARD', "m2": 'FORWARD', "m3": 'FORWARD', "m4": 'FORWARD', "m5": 'FORWARD', "m6": 'FORWARD', "m7": 'FORWARD', "m8": 'FORWARD' };
-      localStorage.setItem('motorDirections', JSON.stringify(directions));
-      var maxSpeeds = { "m1": 4320.0, "m2": 4320.0, "m3": 4320.0, "m4": 4320.0, "m5": 4320.0, "m6": 4320.0, "m7": 4320.0, "m8": 4320.0 }; //This may be changed (1440 * 3)
-      localStorage.setItem('motorMaxSpeeds', JSON.stringify(maxSpeeds));
-      var modes = {
-        "m1": 'RUN_WITHOUT_ENCODER', "m2": 'RUN_WITHOUT_ENCODER', "m3": 'RUN_WITHOUT_ENCODER', "m4": 'RUN_WITHOUT_ENCODER',
-        "m5": 'RUN_WITHOUT_ENCODER', "m6": 'RUN_WITHOUT_ENCODER', "m7": 'RUN_WITHOUT_ENCODER', "m8": 'RUN_WITHOUT_ENCODER'
-      };
-      localStorage.setItem('motorModes', JSON.stringify(modes));
-      localStorage.setItem('motorPowers', JSON.stringify(zeroValues));
-      localStorage.setItem('motorTargetPositions', JSON.stringify(zeroValues));
-      var targetPositonTolerances = { "m1": 10.0, "m2": 10.0, "m3": 10.0, "m4": 10.0, "m5": 10.0, "m6": 10.0, "m7": 10.0, "m8": 10.0 };
-      localStorage.setItem('motorTargetPositionTolerances', JSON.stringify(targetPositonTolerances));
-      localStorage.setItem('motorVelocitys', JSON.stringify(zeroValues));
-      var zeroPowerBehaviors = { "m1": 'BRAKE', "m2": 'BRAKE', "m3": 'BRAKE', "m4": 'BRAKE', "m5": 'BRAKE', "m6": 'BRAKE', "m7": 'BRAKE', "m8": 'BRAKE' };
-      localStorage.setItem('motorZeroPowerBehaviors', JSON.stringify(zeroPowerBehaviors));
+      localStorage.setItem('motorDirections', '["FORWARD", "FORWARD", "FORWARD", "FORWARD", "FORWARD", "FORWARD", "FORWARD", "FORWARD"]');
+      localStorage.setItem('motorMaxSpeeds', '[4320.0, 4320.0, 4320.0, 4320.0, 4320.0, 4320.0, 4320.0, 4320.0]');
+      localStorage.setItem('motorModes', '["RUN_WITHOUT_ENCODER", "RUN_WITHOUT_ENCODER", "RUN_WITHOUT_ENCODER", "RUN_WITHOUT_ENCODER","RUN_WITHOUT_ENCODER", "RUN_WITHOUT_ENCODER", "RUN_WITHOUT_ENCODER", "RUN_WITHOUT_ENCODER"]');
+      localStorage.setItem('motorPowers', '[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]');
+      localStorage.setItem('motorTargetPositions', '[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]');
+      localStorage.setItem('motorTargetPositionTolerances', '[10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0]');
+      localStorage.setItem('motorVelocitys', '[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]');
+      localStorage.setItem('motorZeroPowerBehaviors', '["BRAKE", "BRAKE", "BRAKE", "BRAKE", "BRAKE", "BRAKE", "BRAKE", "BRAKE"]');
     }
 
     localStorage.setItem('playMode', "Autonomous")
@@ -5432,7 +5421,7 @@
       var i = blocksContent.indexOf('</xml>');
       blocksContent = blocksContent.substring(0, i + 6);
       Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(blocksContent), workspace);
-      resetInterpreter();
+      stopProgram();
       document.getElementById("telemetryText").innerText = 'Loaded new \"' + programName + '\" Program \n';
       localStorage.setItem("Program Name: " + programName, blocksContent);
       prepareUiToLoadProgram();
@@ -5462,7 +5451,7 @@
           blocksContent = blocksContent.substring(0, i + 6);
           Blockly.mainWorkspace.clear();
           Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(blocksContent), workspace);
-          resetInterpreter();
+          stopProgram();
           if (sampleProgram != 'BasicOpMode')
             document.getElementById("telemetryText").innerText = 'Loaded Example \"' + sampleProgram + '\" Program \n';
           else if (document.getElementById("telemetryText").innerText != '-Telemetry Output-') {
@@ -5498,7 +5487,7 @@
         document.getElementById('download').disabled = false;
         var xml = Blockly.Xml.textToDom(localStorage.getItem(nameOfProject));
         Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
-        resetInterpreter();
+        stopProgram();
         document.getElementById("telemetryText").innerText = 'Loaded "' + document.getElementById("programSelect").value + '" Program \n';
       }
     }
@@ -5515,7 +5504,7 @@
       localStorage.removeItem("Program Name: " + programName);
       newProgram('BasicOpMode');
       prepareUiToLoadProgram();
-      resetInterpreter();
+      stopProgram();
       document.getElementById("telemetryText").innerText = 'Deleted "' + programName + '" Program \n';
       overlay(false, 0);
     }
@@ -5527,352 +5516,41 @@
       button.parentElement.setAttribute('download', document.getElementById('programSelect').value + ".blk");
     }
 
-
-    //Custom Block JavaScript
-    function initApi(interpreter, globalObject) {
-      //LinearOpMode Blocks
-      var linearOpMode = interpreter.nativeToPseudo({});
-      interpreter.setProperty(globalObject, 'linearOpMode', linearOpMode);
-
-      var wrapper = function () {
-        return; //NON FUNCTIONAL
-      };
-      interpreter.setProperty(linearOpMode, 'waitForStart', interpreter.createNativeFunction(wrapper));
-
-      var wrapper = function () {
-        return; //NON FUNCTIONAL
-      };
-      interpreter.setProperty(linearOpMode, 'idle', interpreter.createNativeFunction(wrapper));
-
-      var wrapper = function (millis) {
-        pauseTime = Math.max(100, Math.min(10000, millis));
-        return Math.max(100, Math.min(10000, millis));
-      };
-      interpreter.setProperty(linearOpMode, 'sleep', interpreter.createNativeFunction(wrapper));
-
-      var wrapper = function () {
-        return true; //NON FUNCTIONAL
-      };
-      interpreter.setProperty(linearOpMode, 'opModeIsActive', interpreter.createNativeFunction(wrapper));
-
-      var wrapper = function () {
-        return true; //NON FUNCTIONAL
-      };
-      interpreter.setProperty(linearOpMode, 'isStarted', interpreter.createNativeFunction(wrapper));
-
-      var wrapper = function () {
-        return false; //NON FUNCTIONAL
-      };
-      interpreter.setProperty(linearOpMode, 'isStopRequested', interpreter.createNativeFunction(wrapper));
-
-      var wrapper = function () {
-        return 0; //NON FUNCTIONAL
-      };
-      interpreter.setProperty(linearOpMode, 'getRuntime', interpreter.createNativeFunction(wrapper));
-
-      //Gamepad Blocks
-      var gamepad = interpreter.nativeToPseudo({});
-      interpreter.setProperty(globalObject, 'gamepad', gamepad);
-
-      var wrapper = function (gamepadNum, buttonId, controllerType) {
-        if (navigator.getGamepads()[gamepadNum] != null && (controllerType == "Both" || navigator.getGamepads()[gamepadNum].id.startsWith(controllerType))) {
-          if (buttonId == -1) {
-            var atRest = true;
-            for (var i = 0; i < navigator.getGamepads()[gamepadNum].buttons.length; i++)
-              if (navigator.getGamepads()[gamepadNum].buttons[i].pressed)
-                atRest = false;
-            for (var i = 0; i < navigator.getGamepads()[gamepadNum].axes.length; i++)
-              if (Math.abs(navigator.getGamepads()[gamepadNum].axes[i]) > .2)
-                atRest = false;
-            return atRest;
-          }
-          return navigator.getGamepads()[gamepadNum].buttons[buttonId].pressed;
-        }
-        return false;
-      };
-      interpreter.setProperty(gamepad, 'boolValue', interpreter.createNativeFunction(wrapper));
-
-      var wrapper = function (gamepadNum, buttonAxis) {
-        if (navigator.getGamepads()[gamepadNum] != null) {
-          if (buttonAxis < 4)
-            return navigator.getGamepads()[gamepadNum].axes[buttonAxis];
-          else
-            return navigator.getGamepads()[gamepadNum].buttons[buttonAxis].value;
-        }
-        return 0;
-      };
-      interpreter.setProperty(gamepad, 'numberValue', interpreter.createNativeFunction(wrapper));
-
-      //Motor Blocks
-      var motor = interpreter.nativeToPseudo({});
-      interpreter.setProperty(globalObject, 'motor', motor);
-
-      var wrapper = function (motorNums, property, values) {
-        var motorProperties = JSON.parse(localStorage.getItem('motor' + property + 's'));
-        for (var i = 0; i < motorNums.g.length; i++) {
-          //Translates Power to Velocity
-          if (property == 'Power') {
-            values.g[i] = Math.min(1, Math.max(values.g[i], -1));
-            var motorVel = JSON.parse(localStorage.getItem('motorVelocitys'));
-            motorVel[Object.keys(motorProperties)[motorNums.g[i]]] = values.g[i] * JSON.parse(localStorage.getItem('motorMaxSpeeds'))[Object.keys(motorProperties)[motorNums.g[i]]];
-            localStorage.setItem('motorVelocitys', JSON.stringify(motorVel));
-          }
-          //Translates Velocity to Power
-          if (property == 'Velocity') {
-            var motorPow = JSON.parse(localStorage.getItem('motorPowers'));
-            motorPow[Object.keys(motorProperties)[motorNums.g[i]]] = Math.min(1, Math.max(values.g[i] / JSON.parse(localStorage.getItem('motorMaxSpeeds'))[Object.keys(motorProperties)[motorNums.g[i]]], -1));
-            localStorage.setItem('motorPowers', JSON.stringify(motorPow));
-            motorProperties[Object.keys(motorProperties)[motorNums.g[i]]] = Math.min(5760, Math.max(values.g[i], -5760)); //This value may change (1440 * 4)
-          }
-          else
-            motorProperties[Object.keys(motorProperties)[motorNums.g[i]]] = values.g[i];
-        }
-        return localStorage.setItem('motor' + property + 's', JSON.stringify(motorProperties));
-      };
-      interpreter.setProperty(motor, 'setProperty', interpreter.createNativeFunction(wrapper));
-
-      var wrapper = function (motorNum, property) {
-        var returnVar;
-        if (property == 'PowerFloat') {
-          var motorPowers = JSON.parse(localStorage.getItem('motorPowers'));
-          var motorPower = motorPowers[Object.keys(motorPowers)[motorNum]];
-          returnVar = (Math.round(motorPower) != motorPower);
-        }
-        else if (property == 'Velocity') {
-          var motorProperties = JSON.parse(localStorage.getItem('motorReturnVelocitys'));
-          returnVar = motorProperties[Object.keys(motorProperties)[motorNum]];
-        }
-        else {
-          var motorProperties = JSON.parse(localStorage.getItem('motor' + property + 's'));
-          returnVar = motorProperties[Object.keys(motorProperties)[motorNum]];
-        }
-        return returnVar;
-      };
-      interpreter.setProperty(motor, 'getProperty', interpreter.createNativeFunction(wrapper));
-
-      var wrapper = function (motorNum) {
-        var motorProp = JSON.parse(localStorage.getItem('motorCurrentPositions'));
-        var motorPosition = motorProp[Object.keys(motorProp)[motorNum]];
-        motorProp = JSON.parse(localStorage.getItem('motorTargetPositions'));
-        var motorTarget = motorProp[Object.keys(motorProp)[motorNum]];
-        motorProp = JSON.parse(localStorage.getItem('motorTargetPositionTolerances'));
-        var motorTolerance = motorProp[Object.keys(motorProp)[motorNum]];
-        return (Math.abs(motorPosition - motorTarget) > motorTolerance);
-      };
-      interpreter.setProperty(motor, 'isBusy', interpreter.createNativeFunction(wrapper));
-
-      var wrapper = function () {
-        return; //NON FUNCTIONAL
-      };
-      interpreter.setProperty(motor, 'setMotorEnable', interpreter.createNativeFunction(wrapper));
-
-      var wrapper = function () {
-        return; //NON FUNCTIONAL
-      };
-      interpreter.setProperty(motor, 'setMotorDisable', interpreter.createNativeFunction(wrapper));
-
-      var wrapper = function () {
-        return true; //NON FUNCTIONAL
-      };
-      interpreter.setProperty(motor, 'isMotorEnabled', interpreter.createNativeFunction(wrapper));
-
-      var wrapper = function () {
-        return; //NON FUNCTIONAL
-      };
-      interpreter.setProperty(motor, 'setVelocity_withAngleUnit', interpreter.createNativeFunction(wrapper));
-
-      var wrapper = function () {
-        return 0; //NON FUNCTIONAL
-      };
-      interpreter.setProperty(motor, 'getVelocity_withAngleUnit', interpreter.createNativeFunction(wrapper));
-
-      var wrapper = function () {
-        return; //NON FUNCTIONAL
-      };
-      interpreter.setProperty(motor, 'setPIDFCoefficients', interpreter.createNativeFunction(wrapper));
-
-      var wrapper = function () {
-        return 0; //NON FUNCTIONAL
-      };
-      interpreter.setProperty(motor, 'getPIDFCoefficients', interpreter.createNativeFunction(wrapper));
-
-      var wrapper = function () {
-        return; //NON FUNCTIONAL
-      };
-      interpreter.setProperty(motor, 'setVelocityPIDFCoefficients', interpreter.createNativeFunction(wrapper));
-
-      var wrapper = function () {
-        return; //NON FUNCTIONAL
-      };
-      interpreter.setProperty(motor, 'setPositionPIDFCoefficients', interpreter.createNativeFunction(wrapper));
-
-      var wrapper = function () {
-        return 0; //NON FUNCTIONAL
-      };
-      interpreter.setProperty(motor, 'getCurrent', interpreter.createNativeFunction(wrapper));
-
-      var wrapper = function () {
-        return 0; //NON FUNCTIONAL
-      };
-      interpreter.setProperty(motor, 'getCurrentAlert', interpreter.createNativeFunction(wrapper));
-
-      var wrapper = function () {
-        return; //NON FUNCTIONAL
-      };
-      interpreter.setProperty(motor, 'setCurrentAlert', interpreter.createNativeFunction(wrapper));
-
-      var wrapper = function () {
-        return false; //NON FUNCTIONAL
-      };
-      interpreter.setProperty(motor, 'isOverCurrent', interpreter.createNativeFunction(wrapper));
-
-      //Telemetry Blocks
-      var telemetry = interpreter.nativeToPseudo({});
-      interpreter.setProperty(globalObject, 'telemetry', telemetry);
-
-      var wrapper = function (key, data) {
-        return (telemetryData += key + ": " + data + "\n");
-      };
-      interpreter.setProperty(telemetry, 'addData', interpreter.createNativeFunction(wrapper));
-
-      var wrapper = function () {
-        document.getElementById("telemetryText").innerText = telemetryData;
-        telemetryData = "";
-        return;
-      };
-      interpreter.setProperty(telemetry, 'update', interpreter.createNativeFunction(wrapper));
-
-      var wrapper = function () {
-        return; //NON FUNCTIONAL
-      };
-      interpreter.setProperty(telemetry, 'speak', interpreter.createNativeFunction(wrapper));
-
-      var wrapper = function () {
-        return; //NON FUNCTIONAL
-      };
-      interpreter.setProperty(telemetry, 'setDisplayFormat', interpreter.createNativeFunction(wrapper));
-
-      //Miscellaneous Blocks
-      var misc = interpreter.nativeToPseudo({});
-      interpreter.setProperty(globalObject, 'misc', misc);
-
-      var wrapper = function () {
-        return null;
-      };
-      interpreter.setProperty(misc, 'getNull', interpreter.createNativeFunction(wrapper));
-
-      var wrapper = function (value) {
-        return null == value;
-      };
-      interpreter.setProperty(misc, 'isNull', interpreter.createNativeFunction(wrapper));
-
-      var wrapper = function (value) {
-        return null !== value;
-      };
-      interpreter.setProperty(misc, 'isNotNull', interpreter.createNativeFunction(wrapper));
-
-      var wrapper = function (number, precision) {
-        var string = "" + Math.round((number + Number.EPSILON) * (10 ** precision)) / (10 ** precision);
-        if (precision > 0) {
-          if (!string.includes('.'))
-            string += '.';
-          string += (10 ** (precision - string.split('.')[1].length)).toString().substring(1);
-        }
-        return string;
-      };
-      interpreter.setProperty(misc, 'formatNumber', interpreter.createNativeFunction(wrapper));
-
-      var wrapper = function (number, precision) {
-        return Math.round((number + Number.EPSILON) * (10 ** precision)) / (10 ** precision);
-      };
-      interpreter.setProperty(misc, 'roundDecimal', interpreter.createNativeFunction(wrapper));
-    }
-
-    var telemetryData = "";
-
-    var myInterpreter = null;
-    var runner;
-    var pauseTime = 0;
-
-    function resetInterpreter() {
-      telemetryData = "";
-      resetSendableMotorProperties();
-      myInterpreter = null;
-      pauseTime = 0;
-      if (runner) {
-        clearTimeout(runner);
-        runner = null;
-      }
-    }
+	var JSONNav = new Object();
+	JSONNav.gamepads = [null, null];
 
     var myWorker;
     function startProgram() {
       myWorker = new Worker('interpreterWorker.js');
       myWorker.postMessage(["code", Blockly.JavaScript.workspaceToCode(Blockly.mainWorkspace)]);
       myWorker.onmessage = function (e) {
-        if (e.data == "request encoder") {
-          myWorker.postMessage(["data", localStorage.getItem('motorCurrentPositions')]);
-        } else {
-          localStorage.setItem('motorPowers', e.data);
+		if (e.data[0] == "telemetry") {
+		  document.getElementById("telemetryText").innerText = e.data[1];
+		}
+		else if (e.data[0] == "storageSet") {
+		  localStorage.setItem(e.data[1], e.data[2]);
+		}
+        else if (e.data == "request data") {
+		  for (var g = 0; g < 2; g++)
+			if (JSONNav.gamepads[g] != null) {
+			  for (var i = 0; i < navigator.getGamepads()[g].buttons.length; i++)
+				JSONNav.gamepads[g].buttons[i] = navigator.getGamepads()[g].buttons[i].value;
+			  JSONNav.gamepads[g].axes = navigator.getGamepads()[g].axes;
+			}
+          myWorker.postMessage(["data", JSONNav, localStorage.getItem('motorCurrentPositions')]);
         }
       }
     }
 
     function stopProgram() {
-      myWorker.terminate();
-      motorPowers = { "m1": 0.0, "m2": 0.0, "m3": 0.0, "m4": 0.0, "m5": 0.0, "m6": 0.0, "m7": 0.0, "m8": 0.0 };
-      localStorage.setItem('motorPowers', JSON.stringify(motorPowers));
-      localStorage.setItem('stopMatch', true);
-      document.getElementById("telemetryText").innerText = "Program Aborted \n";
+	  if (myWorker != null) {
+		telemetryData = "";
+		myWorker.terminate();
+		resetSendableMotorProperties();
+		localStorage.setItem('stopMatch', true);
+		document.getElementById("telemetryText").innerText = "Program Aborted \n";
+	  }
     }
-
-
-    // function startProgram() {
-    //   resetInterpreter();
-    //   setTimeout(delayStartProgram, 100);
-    // }
-
-    function delayStartProgram() {
-      var code = Blockly.JavaScript.workspaceToCode(Blockly.mainWorkspace);
-      var finalCode = "runOpMode();\n";
-
-      var inFunction = false;
-      for (var line of code.split('\n')) {
-        if (line.startsWith('function '))
-          inFunction = true;
-        if (inFunction || line == '' || line.startsWith('var ') || line.startsWith('// '))
-          finalCode += line + '\n';
-        else
-          finalCode += '//' + line + '\n';
-        if (line == '}')
-          inFunction = false;
-      }
-
-      console.log(finalCode);
-      localStorage.setItem('startMatch', true);
-      document.getElementById("telemetryText").innerText = "Program Started \n";
-      myInterpreter = new Interpreter(finalCode, initApi);
-      nextStep();
-      return;
-    }
-
-    function nextStep() {
-      if (myInterpreter.step()) {
-        setTimeout(nextStep, pauseTime);
-        if (pauseTime != 0) {
-          pauseTime = 0;
-        }
-      } else {
-        resetInterpreter();
-        document.getElementById("telemetryText").innerText = "Program Ended \n";
-      }
-    }
-
-    // function stopProgram() {
-    //   localStorage.setItem('stopMatch', true);
-    //   resetInterpreter();
-    //   document.getElementById("telemetryText").innerText = "Program Aborted \n";
-    // }
 
     function resetField() {
       localStorage.setItem('resetField', true);

@@ -15,7 +15,7 @@ function initApi(interpreter, globalObject) {
     interpreter.setProperty(linearOpMode, 'idle', interpreter.createNativeFunction(wrapper));
 
     var wrapper = function (millis) {
-        const end = Date.now() + Math.max(100, Math.min(10000, delayTime))
+        const end = Date.now() + Math.max(100, Math.min(10000, millis))
         while (Date.now() < end) {
 
         }
@@ -48,29 +48,29 @@ function initApi(interpreter, globalObject) {
     interpreter.setProperty(globalObject, 'gamepad', gamepad);
 
     var wrapper = function (gamepadNum, buttonId, controllerType) {
-        if (navigator.getGamepads()[gamepadNum] != null && (controllerType == "Both" || navigator.getGamepads()[gamepadNum].id.startsWith(controllerType))) {
+        if (JSONNav.gamepads[gamepadNum] != null && (controllerType == "Both" || JSONNav.gamepads[gamepadNum].id.startsWith(controllerType))) {
             if (buttonId == -1) {
                 var atRest = true;
-                for (var i = 0; i < navigator.getGamepads()[gamepadNum].buttons.length; i++)
-                    if (navigator.getGamepads()[gamepadNum].buttons[i].pressed)
+                for (var i = 0; i < JSONNav.gamepads[gamepadNum].buttons.length; i++)
+                    if (JSONNav.gamepads[gamepadNum].buttons[i] > 0)
                         atRest = false;
-                for (var i = 0; i < navigator.getGamepads()[gamepadNum].axes.length; i++)
-                    if (Math.abs(navigator.getGamepads()[gamepadNum].axes[i]) > .2)
+                for (var i = 0; i < JSONNav.gamepads[gamepadNum].axes.length; i++)
+                    if (Math.abs(JSONNav.gamepads[gamepadNum].axes[i]) > .2)
                         atRest = false;
                 return atRest;
             }
-            return navigator.getGamepads()[gamepadNum].buttons[buttonId].pressed;
+            return JSONNav.gamepads[gamepadNum].buttons[buttonId] > 0;
         }
         return false;
     };
     interpreter.setProperty(gamepad, 'boolValue', interpreter.createNativeFunction(wrapper));
 
     var wrapper = function (gamepadNum, buttonAxis) {
-        if (navigator.getGamepads()[gamepadNum] != null) {
+        if (JSONNav.gamepads[gamepadNum] != null) {
             if (buttonAxis < 4)
-                return navigator.getGamepads()[gamepadNum].axes[buttonAxis];
+                return JSONNav.gamepads[gamepadNum].axes[buttonAxis];
             else
-                return navigator.getGamepads()[gamepadNum].buttons[buttonAxis].value;
+                return JSONNav.gamepads[gamepadNum].buttons[buttonAxis];
         }
         return 0;
     };
@@ -80,59 +80,50 @@ function initApi(interpreter, globalObject) {
     var motor = interpreter.nativeToPseudo({});
     interpreter.setProperty(globalObject, 'motor', motor);
 
-    var wrapper = function (motorNums, property, values) {
-        // var motorProperties = JSON.parse(localStorage.getItem('motor' + property + 's'));
-        for (var i = 0; i < motorNums.g.length; i++) {
-            //Translates Power to Velocity
-            if (property == 'Power') {
-                values.g[i] = Math.min(1, Math.max(values.g[i], -1));
-                // var motorVel = JSON.parse(localStorage.getItem('motorVelocitys'));
-                motorVel[Object.keys(motorProperties)[motorNums.g[i]]] = values.g[i] * 1;//JSON.parse(localStorage.getItem('motorMaxSpeeds'))[Object.keys(motorProperties)[motorNums.g[i]]];
-                postMessage(['motorVelocitys', JSON.stringify(motorVel)]);
-            }
-            //Translates Velocity to Power
-            if (property == 'Velocity') {
-                // var motorPow = JSON.parse(localStorage.getItem('motorPowers'));
-                motorPow[Object.keys(motorProperties)[motorNums.g[i]]] = Math.min(1, Math.max(values.g[i] / 1.0, -1));//JSON.parse(localStorage.getItem('motorMaxSpeeds'))[Object.keys(motorProperties)[motorNums.g[i]]], -1));
-                postMessage(['motorPowers', JSON.stringify(motorPow)]);
-                motorProperties[Object.keys(motorProperties)[motorNums.g[i]]] = Math.min(5760, Math.max(values.g[i], -5760)); //This value may change (1440 * 4)
-            }
-            else
-                motorProperties[Object.keys(motorProperties)[motorNums.g[i]]] = values.g[i];
-        }
-        return postMessage(['motor' + property + 's', JSON.stringify(motorPowers)]);
-    };
-    interpreter.setProperty(motor, 'setProperty', interpreter.createNativeFunction(wrapper));
+	var wrapper = function (motorNums, property, values) {
+		for (var i = 0; i < motorNums.g.length; i++) {
+			//Translates Power to Velocity
+			if (property == 'Power') {
+				values.g[i] = Math.min(1, Math.max(values.g[i], -1));
+				motorProp['motorVelocitys'][motorNums.g[i]] = values.g[i] * motorProp['motorMaxSpeeds'][motorNums.g[i]];
+				postMessage(["storageSet", 'motorVelocitys', JSON.stringify(motorProp['motorVelocitys'])]);
+			}
+			//Translates Velocity to Power
+			if (property == 'Velocity') {
+				motorProp['motorPowers'][motorNums.g[i]] = Math.min(1, Math.max(values.g[i] / motorProp['motorMaxSpeeds'][motorNums.g[i]], -1));
+				postMessage(["storageSet", 'motorPowers', JSON.stringify(motorProp['motorPowers'])]);
+				motorProp['motor' + property + 's'][motorNums.g[i]] = Math.min(5760, Math.max(values.g[i], -5760)); //This value may change (1440 * 4)
+			}
+			else
+				motorProp['motor' + property + 's'][motorNums.g[i]] = values.g[i];
+		}
+		return postMessage(["storageSet", 'motor' + property + 's', JSON.stringify(motorProp['motor' + property + 's'])]);
+	};
+	interpreter.setProperty(motor, 'setProperty', interpreter.createNativeFunction(wrapper));
 
-    var wrapper = function (motorNum, property) {
+	var wrapper = function (motorNum, property) {
         var returnVar;
         if (property == 'PowerFloat') {
-            // var motorPowers = JSON.parse(localStorage.getItem('motorPowers'));
-            var motorPower = motorPowers[Object.keys(motorPowers)[motorNum]];
-            returnVar = (Math.round(motorPower) != motorPower);
+			var motorPower = motorProp['motorPowers'][motorNum];
+			returnVar = (Math.round(motorPower) != motorPower);
         }
         else if (property == 'Velocity') {
-            // var motorProperties = JSON.parse(localStorage.getItem('motorReturnVelocitys'));
-            returnVar = motorProperties[Object.keys(motorProperties)[motorNum]];
+			returnVar = motorProp['motorVelocitys'][motorNum]; //Later will be 'motorCurrentVelocities'
         }
         else {
-            // var motorProperties = JSON.parse(localStorage.getItem('motor' + property + 's'));
-            returnVar = motorProperties[Object.keys(motorProperties)[motorNum]];
+			returnVar = motorProp['motor' + property + 's'][motorNum];
         }
         return returnVar;
-    };
-    interpreter.setProperty(motor, 'getProperty', interpreter.createNativeFunction(wrapper));
+      };
+	interpreter.setProperty(motor, 'getProperty', interpreter.createNativeFunction(wrapper));
 
-    var wrapper = function (motorNum) {
-        // var motorProp = JSON.parse(localStorage.getItem('motorCurrentPositions'));
-        var motorPosition = 12;//motorProp[Object.keys(motorProp)[motorNum]];
-        // motorProp = JSON.parse(localStorage.getItem('motorTargetPositions'));
-        var motorTarget = 12;//motorProp[Object.keys(motorProp)[motorNum]];
-        // motorProp = JSON.parse(localStorage.getItem('motorTargetPositionTolerances'));
-        var motorTolerance = 1;//motorProp[Object.keys(motorProp)[motorNum]];
-        return (Math.abs(motorPosition - motorTarget) > motorTolerance);
-    };
-    interpreter.setProperty(motor, 'isBusy', interpreter.createNativeFunction(wrapper));
+	var wrapper = function (motorNum) {
+        var motorPosition = motorProp['motorCurrentPositions'][motorNum];
+        var motorTarget = motorProp['motorTargetPositions'][motorNum];
+        var motorTolerance = motorProp['motorTargetPositionTolerances'][motorNum];
+		return (Math.abs(motorPosition - motorTarget) > motorTolerance);
+	};
+	interpreter.setProperty(motor, 'isBusy', interpreter.createNativeFunction(wrapper));
 
     var wrapper = function () {
         return; //NON FUNCTIONAL
@@ -209,7 +200,7 @@ function initApi(interpreter, globalObject) {
     interpreter.setProperty(telemetry, 'addData', interpreter.createNativeFunction(wrapper));
 
     var wrapper = function () {
-        document.getElementById("telemetryText").innerText = telemetryData;
+		postMessage(['telemetry', telemetryData]);
         telemetryData = "";
         return;
     };
@@ -264,8 +255,24 @@ function initApi(interpreter, globalObject) {
 var telemetryData = "";
 
 var myInterpreter = null;
-var motorPowers = { "m1": 0.0, "m2": 0.0, "m3": 0.0, "m4": 0.0, "m5": 0.0, "m6": 0.0, "m7": 0.0, "m8": 0.0 };
-var motorValues = { "m1": 0.0, "m2": 0.0, "m3": 0.0, "m4": 0.0, "m5": 0.0, "m6": 0.0, "m7": 0.0, "m8": 0.0 };
+
+var JSONNav = null;
+var motorProp = null;
+resetMotorProperties();
+
+function resetMotorProperties() {
+	motorProp = JSON.parse(
+	'{"motorDirections": ["FORWARD", "FORWARD", "FORWARD", "FORWARD", "FORWARD", "FORWARD", "FORWARD", "FORWARD"], ' +
+	'"motorMaxSpeeds": [4320.0, 4320.0, 4320.0, 4320.0, 4320.0, 4320.0, 4320.0, 4320.0], ' +
+	'"motorModes": ["RUN_WITHOUT_ENCODER", "RUN_WITHOUT_ENCODER", "RUN_WITHOUT_ENCODER", "RUN_WITHOUT_ENCODER","RUN_WITHOUT_ENCODER", "RUN_WITHOUT_ENCODER", "RUN_WITHOUT_ENCODER", "RUN_WITHOUT_ENCODER"], ' +
+	'"motorPowers": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], ' +
+	'"motorTargetPositions": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], ' +
+	'"motorTargetPositionTolerances": [10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0], ' +
+	'"motorVelocitys": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], ' +
+	'"motorZeroPowerBehaviors": ["BRAKE", "BRAKE", "BRAKE", "BRAKE", "BRAKE", "BRAKE", "BRAKE", "BRAKE"], ' +
+	'"motorCurrentPositions": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], ' +
+	'"motorCurrentVelocitys": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]}');
+}
 
 function resetInterpreter() {
     myInterpreter = null;
@@ -275,15 +282,17 @@ importScripts('./blocks/interpreter/acorn_interpreter.js');
 
 onmessage = function (e) {
     if (e.data[0] == "data") {
-        motorValues = JSON.parse(e.data[1]);
+		JSONNav = e.data[1];
+        motorProp['motorCurrentPositions'] = JSON.parse(e.data[2]);
         nextStep();
     } else if (e.data[0] == "code") {
         resetInterpreter();
-        delayStartProgram(e.data[1]);
+        startProgram(e.data[1]);
     }
 }
 
-function delayStartProgram(code) {
+function startProgram(code) {
+	postMessage(['telemetry', "Program Started \n"]);
     var finalCode = "runOpMode();\n";
 
     var inFunction = false;
@@ -297,7 +306,7 @@ function delayStartProgram(code) {
         if (line == '}')
             inFunction = false;
     }
-    motorPowers = { "m1": 0.0, "m2": 0.0, "m3": 0.0, "m4": 0.0, "m5": 0.0, "m6": 0.0, "m7": 0.0, "m8": 0.0 };
+    resetMotorProperties();
     console.log(finalCode);
     telemetryData = "";
     myInterpreter = new Interpreter(finalCode, initApi);
@@ -307,8 +316,9 @@ function delayStartProgram(code) {
 
 function nextStep() {
     if (myInterpreter.step()) {
-        postMessage("request encoder");
+        postMessage("request data");
     } else {
+		postMessage(['telemetry', "Program Ended \n"]);
         resetInterpreter();
     }
 }
