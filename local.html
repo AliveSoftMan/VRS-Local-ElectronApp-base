@@ -13,6 +13,7 @@
   <style>
     body {
       background-color: #242424;
+	  overflow: hidden;
     }
 
     h1 {
@@ -226,6 +227,7 @@
     }
 
     #middleSlider {
+	  min-width: 10px;
       cursor: e-resize;
     }
 
@@ -344,46 +346,49 @@
 
   <link rel="stylesheet" href="./font-awesome/css/font-awesome.min.css">
 
-  <div style="display: flex; display: inline;">
+  <div style="display: flex; width: 100%; justify-content: space-between;">
     <a href="homepage.html" id="backButton"><span class="chevron left"></span></a>
-    <div style="width: 25px; display: inline-block;"></div>
-    <button class="button1" onclick="switchToBlocks()">Blocks</button>
-    <div style="width: 10px; display: inline-block;"></div>
-    <button class="button1" onclick="switchToOnBotJava()">OnBotJava</button>
-
-    <div class="divider"></div>
-
-    <button class="button1" onclick="overlay(true, 4)">New Program</button>
-    <div style="width: 10px; display: inline-block;"></div>
-    <button class="button1" onclick="overlay(true, 0)">Save as...</button>
-    <div style="width: 10px; display: inline-block;"></div>
-    <div class="dropdown dropdown-dark" style="display: inline-block; background-color: #FFFFFF;">
-      <select id="programSelect" class="dropdown-select" onchange="loadProgram()">
-        <option value="Load Program">Load Program</option>
-      </select>
-    </div>
-    <div style="width: 10px; display: inline-block;"></div>
-    <button id="save" class="button1" onclick="autoSave()" disabled>Save</button>
-    <div style="width: 10px; display: inline-block;"></div>
-    <button id="delete" class="button1" onclick="overlay(true, 1)" disabled>Delete</button>
-    <div style="width: 10px; display: inline-block;"></div>
-    <a><button id="download" class="button1" onclick="downloadProgram(this)" disabled>Download</button></a>
-
-    <div class="divider"></div>
-
-    <button class="button1" onclick="startProgram()">Start Program</button>
-    <div style="width: 10px; display: inline-block;"></div>
-    <button class="button1" onclick="stopProgram()">Stop Program</button>
-    <div style="width: 10px; display: inline-block;"></div>
-    <button class="button1" onclick="resetField()">Reset Field</button>
-
-
-    <button class="button1" onClick="playVideo(false)" style="position: absolute; right: 25px;">How to Use</button>
+    <div style="min-width: 12.5px; display: inline-block;"></div>
+    <div id="topMenu" style="white-space: nowrap; overflow: hidden;">
+	  <div style="width: 12.5px; display: inline-block;"></div>
+	  <button class="button1" onclick="switchToBlocks()">Blocks</button>
+	  <div style="width: 10px; display: inline-block;"></div>
+	  <button class="button1" onclick="switchToOnBotJava()">OnBotJava</button>
+	  
+	  <div class="divider"></div>
+	  
+	  <button class="button1" onclick="overlay(true, 4)">New Program</button>
+	  <div style="width: 10px; display: inline-block;"></div>
+	  <button class="button1" onclick="overlay(true, 0)">Save as...</button>
+	  <div style="width: 10px; display: inline-block;"></div>
+	  <div class="dropdown dropdown-dark" style="display: inline-block; background-color: #FFFFFF;">
+	  <select id="programSelect" class="dropdown-select" onchange="loadProgram()">
+	  	<option value="Load Program">Load Program</option>
+	  </select>
+	  </div>
+	  <div style="width: 10px; display: inline-block;"></div>
+	  <button id="save" class="button1" onclick="autoSave()" disabled>Save</button>
+	  <div style="width: 10px; display: inline-block;"></div>
+	  <button id="delete" class="button1" onclick="overlay(true, 1)" disabled>Delete</button>
+	  <div style="width: 10px; display: inline-block;"></div>
+	  <a><button id="download" class="button1" onclick="downloadProgram(this)" disabled>Download</button></a>
+	  
+	  <div class="divider"></div>
+	  
+	  <button class="button1" onclick="startProgram()">Start Program</button>
+	  <div style="width: 10px; display: inline-block;"></div>
+	  <button class="button1" onclick="stopProgram()">Stop Program</button>
+	  <div style="width: 10px; display: inline-block;"></div>
+	  <button class="button1" onclick="resetField()">Reset Field</button>
+	  <div style="width: 12.5px; display: inline-block;"></div>
+	</div>
+    <div style="min-width: 12.5px; display: inline-block;"></div>
+    <button class="button1" onClick="playVideo(false)" style="min-width: 100px;">How to Use</button>
   </div>
 
 
   <div class="container" style="display: flex; height: 100%; padding-top: 5px;">
-    <div id="leftScreen" style="display: flex; width: 50%;">
+    <div id="leftScreen" style="display: flex; min-windth: 10px; width: 50%;">
       <div id="blocklyDiv" style="width: 100%; border:1px solid white;"></div>
       <div id="onBotJavaDiv" style="width: 100%;border:1px solid white;" hidden>
         <h1 id="loadingOBJText">HI</h1>
@@ -392,8 +397,8 @@
 
     <div id="middleSlider" style="width: 10px;"></div>
 
-    <div id="rightScreen" style="width: 50%; background-color: #242424;">
-      <div id="controlPanel" style="height: 50%; background-color: #242424; border:1px solid white; overflow: hidden;">
+    <div id="rightScreen" style="min-width: 10px; width: 50%; background-color: #242424;">
+      <div id="controlPanel" style="min-height: 10px; height: 50%; background-color: #242424; border:1px solid white; overflow: hidden;">
         <div id="textSelection" style="white-space: nowrap; overflow: hidden;" class="buttonText">
           <div style="width: 20px; display: inline-block;"></div>
           <div id="firstTab" style="display: inline-block;" onclick="switchTab(this, 0)">Telemetry</div>
@@ -539,7 +544,7 @@
     var xScreenSize = .5 * document.body.clientWidth;
     document.getElementById('leftScreen').style.width = xScreenSize + "px";
     document.getElementById('rightScreen').style.width = xScreenSize + "px";
-    var yScreenSize = screen.height / 2 - 30;
+    var yScreenSize = window.innerHeight / 2 - 30;
     document.getElementById('controlPanel').style.height = yScreenSize + "px";
     document.getElementById('tabOptions').style.height = (yScreenSize - 82) + "px";
     document.getElementById('fieldView').style.height = yScreenSize + "px";
@@ -566,9 +571,26 @@
     window.addEventListener('mouseup', function () {
       document.getElementById('scrollOverlay').style.visibility = "hidden";
       xScreenSize = Math.min(document.body.clientWidth, Math.max(0, xScreenSize));
-      yScreenSize = Math.min(screen.height - 60, Math.max(0, yScreenSize));
+      yScreenSize = Math.min(window.innerHeight - 60, Math.max(0, yScreenSize));
       mouseClicked = 0;
     });
+
+	window.addEventListener('resize', function () {
+	  //Width Consideration
+	  xScreenSize = document.getElementById('leftScreen').clientWidth;
+	  if (xScreenSize < 10) {
+		document.getElementById('leftScreen').style.width = '10px';
+		xScreenSize = 10;
+	  }
+	  document.getElementById('rightScreen').style.width = (document.body.clientWidth - xScreenSize) + "px";
+	  //Height Consideration
+	  if (yScreenSize + 70 > window.innerHeight || yScreenSize < 10) {
+		yScreenSize = Math.min(window.innerHeight - 70, Math.max(10, yScreenSize));
+	    document.getElementById('controlPanel').style.height = yScreenSize + "px";
+	    document.getElementById('tabOptions').style.height = (yScreenSize - 82) + "px";
+	  }
+	  document.getElementById('fieldView').style.height = ((window.innerHeight - 60) - yScreenSize) + "px";
+	});
 
     window.addEventListener('mousemove', function (event) {
       if (mouseClicked != 0) {
@@ -581,18 +603,17 @@
         }
         if (mouseClicked != 1) {
           yScreenSize += event.movementY * .8;
-          var yScreenSizeLimit = Math.min(screen.height - 70, Math.max(10, yScreenSize));
+          var yScreenSizeLimit = Math.min(window.innerHeight - 70, Math.max(10, yScreenSize));
           document.getElementById('controlPanel').style.height = yScreenSizeLimit + "px";
           document.getElementById('tabOptions').style.height = (yScreenSizeLimit - 82) + "px";
-          document.getElementById('fieldView').style.height = ((screen.height - 60) - yScreenSizeLimit) + "px";
+          document.getElementById('fieldView').style.height = ((window.innerHeight - 60) - yScreenSizeLimit) + "px";
         }
         event.preventDefault();
       }
     });
 
-    var sideScroll = document.getElementById('textSelection')
-
-    sideScroll.addEventListener('wheel', function (event) { sideScroll.scrollLeft += event.deltaY * .5; });
+    document.getElementById('textSelection').addEventListener('wheel', function (event) { document.getElementById('textSelection').scrollLeft += event.deltaY * .5; });
+    document.getElementById('topMenu').addEventListener('wheel', function (event) { document.getElementById('topMenu').scrollLeft += event.deltaY * .5; });
 
     //Switch Tabs
     var prevTabButton = document.getElementById('firstTab');
