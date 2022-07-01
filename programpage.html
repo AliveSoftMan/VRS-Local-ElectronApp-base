@@ -590,14 +590,14 @@
     <div id="rightScreen" style="min-width: 10px; width: 50%; background-color: #242424;">
       <div id="controlPanel"
         style="min-height: 10px; height: 50%; background-color: #242424; border:1px solid white; overflow: hidden;">
-        <div id="textSelection" style="white-space: nowrap; overflow: hidden;" class="buttonText">
+        <div id="textSelection" style="white-space: nowrap; overflow-y: hidden; overflow-x: scroll;" class="buttonText">
           <div style="width: 20px; display: inline-block;"></div>
           <div id="firstTab" style="display: inline-block;" onclick="switchTab(this, 0)">Telemetry</div>
           <div class="divider"></div>
           <div style="display: inline-block;" onclick="switchTab(this, 1)" class="textNormal">Field</div>
           <div class="divider"></div>
           <div style="display: inline-block;" onclick="switchTab(this, 2)" class="textNormal">Novice Lessons</div>
-          <div style="width: 20px; display: inline-block;"></div>
+          <div class="divider"></div>
           <div style="display: inline-block;" onclick="switchTab(this, 3)" class="textNormal">Advanced Lessons</div>
           <div style="width: 20px; display: inline-block;"></div>
         </div>
