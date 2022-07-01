@@ -783,72 +783,199 @@ function switchTab(button, tabNum) {
     }
 }
 
-//---Load Lessons---
-function loadLesson() {
-    document.getElementById('lessonButtons').style.display = "flex";
-    document.getElementById('lessonText').parentElement.style.height = '75%';
-    switch (document.getElementById('lessonSelect').value) {
+//---Load Novice Lessons---
+function loadNoviceLesson() {
+    document.getElementById('noviceLessonButtons').style.display = "flex";
+    document.getElementById('noviceLessonText').parentElement.style.height = '75%';
+    switch (document.getElementById('noviceLessonSelect').value) {
     case "0":
-        document.getElementById('lessonText').innerText = "Difficulty: Easy\n" +
+        document.getElementById('noviceLessonText').innerText = "Difficulty: Easy\n" +
             "In this first lesson, you will need to power the Front Left and Front Right Wheels for a certain amount of time in order to get the robot on the White Line for +5 Points during Autonomous. Press the \"Show the Task\" button to see what you need to do or \"Video Hint\" for an introduction." +
             "\n\nYou'll Learn:\nBasic Motor Powering\nMovement Timing";
         break;
     case "1":
-        document.getElementById('lessonText').innerText = "Difficulty: Easy\n" +
+        document.getElementById('noviceLessonText').innerText = "Difficulty: Easy\n" +
             "The next stage will now be to add power to all 4 Wheels in your program. This will require a bit more precision, but will benefit with the added Torque and Speed the motors will provide. Your robot can have a max of 8 motors and 12 servos for full movement!" +
             "\n\nYou'll Learn:\nBalance between Speed and Reliability\nMore Motor Control";
         break;
     case "2":
-        document.getElementById('lessonText').innerText = "Difficulty: Easy\n" +
+        document.getElementById('noviceLessonText').innerText = "Difficulty: Easy\n" +
             "For this lesson, we will be adding more than just forwards and backwards and introducing rotation! This may require alot more precision than you initially think. If only there was a way of consistently moving..." +
             "\n\nYou'll Learn:\nThe Limits to using Timing\nRotation Basics";
         break;
     case "3":
-        document.getElementById('lessonText').innerText = "Difficulty: Medium\n" +
-            "Let's make the robot go along the path of the strongest shape: the Square! Or was it the triangle? Either way it may be useful to use loops for this program so the code looks cleaner and changes can be made faster. Maybe using a sensor for reliable rotation may be in order!" +
-            "\n\nYou'll Learn:\nThe Joys of Clean Code\nUsing Loop Blocks & the IMU Sensor";
+        document.getElementById('noviceLessonText').innerText = "Difficulty: Medium\n" +
+            "Let's make the robot go along the path of the strongest shape: the Square! Or was it the triangle? More experienced users can consider using the sensors in the IMU to produce more consistent behavior. Don't worry though: you can still accomplish the objective without using the IMU!" +
+            "\n\nYou'll Learn:\nHow to produce rotation\nUsing the IMU Sensor";
         break;
-    case "4":
-        document.getElementById('lessonText').innerText = "Difficulty: Medium\n" +
-            "Are those mecanum wheels on your robot there? Great! That means you have another mode of movement called strafing where the robot can move directly left and right without turning. The wheels just need to spin a certain way..." +
+	case "4":
+		document.getElementById('noviceLessonText').innerText = "Difficulty: Medium\n" +
+            "Let's make the robot do a square again, but this time use loops for this program so the code looks cleaner and changes can be made faster. Maybe using a sensor for reliable rotation may be in order!" +
+            "\n\nYou'll Learn:\nThe Joys of Clean Code\nUsing Loop Blocks & the IMU Sensor";
+		break;
+    case "5":
+        document.getElementById('noviceLessonText').innerText = "Difficulty: Medium\n" +
+            "Are those mecanum wheels on your robot there? Great! That means you have another mode of movement called strafing where the robot can move directly left and right without turning. The wheels just need to spin a certain way... See https://cdn11.bigcommerce.com/s-eem7ijc77k/images/stencil/original/products/2268/28251/3209-0001-0004-Product-Insight-1__89716.1613160165.png?c=2 to learn how to power your motors" +
             "\n\nYou'll Learn:\nThe Art of Expirementing\nStrafing Movement";
         break;
-    case "5":
-        document.getElementById('lessonText').innerText = "Difficulty: Medium\n" +
-            "Alright, now let's start getting some actual autonomous points. First off, let's put the wobble goal in the first position earning +15 points. For right now, we can stick to timing but we can see it becomes a bit more unreliable the more we move." +
-            "\n\nYou'll Learn:\nHow to Handle Large Amounts of Code\nComplex Movement";
+	case "6":
+        document.getElementById('noviceLessonText').innerText = "Difficulty: Medium\n" +
+            "Now, let's do the same thing we did last time, but use loops. Just like the previous loops task, you can use loops to make your code cleaner and easier to read. Consider what kind of path can be repeated to make the robot drive in a square." +
+            "\n\nYou'll Learn:\nThe Joys of Clean Code\nStrafing Movement";
         break;
-    case "6":
-        document.getElementById('lessonText').innerText = "Difficulty: Hard\n" +
-            "Moving onto the next wobble goal position, we know we need a different system of navigation. Let's try out using motor encoders which can tell us the wheel's current position. Motor Encoders: 560 Ticks per Revolution, Wheels' Circumfrence: 4π Inches" +
-            "\n\nYou'll Learn:\nMotor Encoders\nVariables";
+	case "7":
+		document.getElementById('noviceLessonText').innerText = "Difficulty: Medium\n" +
+			"Alright, now let's start getting some actual autonomous points. First off, let's put the wobble goal in the first position earning +15 points. The first position is the one closest to the robot's starting position. For right now, we can stick to timing but we can see it becomes a bit more unreliable the more we move." +
+			"\n\nYou'll Learn:\nHow to Handle Large Amounts of Code\nComplex Movement";
         break;
-    case "7":
-        document.getElementById('lessonText').innerText = "Difficulty: Hard\n" +
-            "Great, we have cracked the code for motor encoders! But... the code looks all messy and complicated and would be a pain to make slight changes to. Let's try and compact the 3 movements the robot can make into 3 functions we can call from the main runOpMode function." +
-            "\n\nYou'll Learn:\nKeeping Code Simple\nFunctions";
-        break;
-    case "8":
-        document.getElementById('lessonText').innerText = "Difficulty: Hard\n" +
-            "Looks like the engineering team has just slapped a shooting mechanism onto your robot. Time to learn how that works. It seems they have wired in a new \"ringLoader\" and \"ringShooter\" motor. Maybe you could even drop off a wobble goal into one of the positions in the same program!" +
-            "\n\nYou'll Learn:\nHandling Multiple Tasks\nComplex Motors";
-        break;
-    case "9":
-        document.getElementById('lessonText').innerText = "Difficulty: Extreme!\n" +
-            "You're Driving Team isn't looking too good during TeleOp. Looks like you'll have to step in to earn those extra points during autonomous! Try and shoot at each powershot while either rotating or strafing to change trajectory. Get as many points as possible with *correct* wobble goal position included!" +
-            "\n\nYou'll Learn:\nScoring Big with Extra Sensors\nHow to Code! (hopefully...)";
-        break;
+	case "8":
+		document.getElementById('noviceLessonText').innerText = "Difficulty: Medium\n" +
+			"The second wobble goal position is box in the middle of the other two. Let's try out using motor encoders which can tell us the wheel's current position. Motor Encoders: 560 Ticks per Revolution, Wheels' Circumfrence: 4π Inches" +
+			"\n\nYou'll Learn:\nMotor Encoders\nVariables";
+		break;
+	case "9":
+		document.getElementById('noviceLessonText').innerText = "Difficulty: Medium\n" +
+			"Let's do the same thing as the last lesson, but get it to the farthest position. As you can imagine, trying to accomplish this without encoders would lead to some major inaccuracies. Make sure you use encoders and any other precision programming utilities to ensure that your robot stays reliable traveling long distances" +
+			"\n\nYou'll Learn:\nMotor Encoders\nVariables";
+		break;
+	case "10":
+		document.getElementById('noviceLessonText').innerText = "Difficulty: Hard\n" +
+			"Now, we are going to try and score big points. Shooting rings is the whole premise of this game: wouldn't it be cool to do it autonomously. Navigate carefully to a position where you can fire rings into one of the goals, and then try to autonomously pick up rings. Encoder use will be critical here!" +
+			"\n\nYou'll Learn:\nMotor Encoders\nVariables";
+		break;
+	case "11":
+		document.getElementById('noviceLessonText').innerText = "Difficulty: Hard\n" +
+			"Time for the final challenge! You will now try to shoot rings at the powershot target. This requires an enormous amount of precision, so make sure to use all the sensors in your arsenal to get the most consistent result. Bonus points if you can pick up rings and shoot them as well!" +
+			"\n\nYou'll Learn:\nMotor Encoders\nVariables";
+		break;
     default:
-        document.getElementById('lessonButtons').style.display = "none";
-        document.getElementById('lessonText').innerText = "Select a Lesson to begin Learning!";
-        document.getElementById('lessonText').parentElement.style.height = '';
+        document.getElementById('noviceLessonButtons').style.display = "none";
+        document.getElementById('noviceLessonText').innerText = "Select a Lesson to begin Learning!";
+        document.getElementById('noviceLessonText').parentElement.style.height = '';
         break;
     }
 }
 
-function runLessonCode() {
+//---Load Advanced Lessons---
+function loadAdvancedLesson() {
+    document.getElementById('advancedLessonButtons').style.display = "flex";
+    document.getElementById('advancedLessonText').parentElement.style.height = '75%';
+    switch (document.getElementById('advancedLessonSelect').value) {
+	case "0":
+		document.getElementById('advancedLessonText').innerText = "Difficulty: Easy\n" +
+			"In this first lesson, you will need to power the Front Left and Front Right Wheels for a certain amount of time in order to get the robot on the White Line for +5 Points during Autonomous. Press the \"Show the Task\" button to see what you need to do or \"Video Hint\" for an introduction." +
+			"\n\nYou'll Learn:\nBasic Motor Powering\nMovement Timing";
+		break;
+	case "1":
+		document.getElementById('advancedLessonText').innerText = "Difficulty: Easy\n" +
+			"The next stage will now be to add power to all 4 Wheels in your program. This will require a bit more precision, but will benefit with the added Torque and Speed the motors will provide. Your robot can have a max of 8 motors and 12 servos for full movement!" +
+			"\n\nYou'll Learn:\nBalance between Speed and Reliability\nMore Motor Control";
+		break;
+	case "2":
+		document.getElementById('advancedLessonText').innerText = "Difficulty: Easy\n" +
+			"For this lesson, we will be adding more than just forwards and backwards and introducing rotatinoviceon! This may require alot more precision than you initially think. If only there was a way of consistently moving..." +
+			"\n\nYou'll Learn:\nThe Limits to using Timing\nRotation Basics";
+		break;
+	case "3":
+		document.getElementById('advancedLessonText').innerText = "Difficulty: Medium\n" +
+			"Let's make the robot go along the path of the strongest shape: the Square! Or was it the triangle? More experienced users can consider using the sensors in the IMU to produce more consistent behavior. Don't worry though: you can still accomplish the objective without using the IMU!" +
+			"\n\nYou'll Learn:\nHow to produce rotation\nUsing the IMU Sensor";
+		break;
+	case "4":
+		document.getElementById('advancedLessonText').innerText = "Difficulty: Medium\n" +
+			"Are those mecanum wheels on your robot there? Great! That means you have another mode of movement called strafing where the robot can move directly left and right without turning. The wheels just need to spin a certain way... See https://cdn11.bigcommerce.com/s-eem7ijc77k/images/stencil/original/products/2268/28251/3209-0001-0004-Product-Insight-1__89716.1613160165.png?c=2 to learn how to power your motors" +
+			"\n\nYou'll Learn:\nThe Art of Expirementing\nStrafing Movement";
+		break;
+	case "5":
+		document.getElementById('advancedLessonText').innerText = "Difficulty: Medium\n" +
+			"Alright, now let's start getting some actual autonomous points. First off, let's put the wobble goal in the first position earning +15 points. The first position is the one closest to the robot's starting position. For right now, we can stick to timing but we can see it becomes a bit more unreliable the more we move." +
+			"\n\nYou'll Learn:\nHow to Handle Large Amounts of Code\nComplex Movement";
+		break;
+	case "6":
+		document.getElementById('advancedLessonText').innerText = "Difficulty: Medium\n" +
+			"The second wobble goal position is box in the middle of the other two. Let's try out using motor encoders which can tell us the wheel's current position. Motor Encoders: 560 Ticks per Revolution, Wheels' Circumfrence: 4π Inches" +
+			"\n\nYou'll Learn:\nMotor Encoders\nVariables";
+		break;
+	case "7":
+		document.getElementById('advancedLessonText').innerText = "Difficulty: Medium\n" +
+			"Let's do the same thing as the last lesson, but get it to the farthest position. As you can imagine, trying to accomplish this without encoders would lead to some major inaccuracies. Make sure you use encoders and any other precision programming utilities to ensure that your robot stays reliable traveling long distances" +
+			"\n\nYou'll Learn:\nMotor Encoders\nVariables";
+		break;
+	case "8":
+		document.getElementById('advancedLessonText').innerText = "Difficulty: Hard\n" +
+			"Looks like the engineering team has just slapped a shooting mechanism onto your robot. Time to learn how that works. It seems they have wired in a new \"ringLoader\" and \"ringShooter\" motor. Maybe you could even drop off a wobble goal into one of the positions in the same program!" +
+			"\n\nYou'll Learn:\nMotor Encoders\nVariables";
+		break;
+	case "9":
+		document.getElementById('advancedLessonText').innerText = "Difficulty: Hard\n" +
+			"You're Driving Team isn't looking too good during TeleOp. Looks like you'll have to step in to earn those extra points during autonomous! Try and shoot at each powershot while either rotating or strafing to change trajectory. Get as many points as possible with *correct* wobble goal position included!" +
+			"\n\nYou'll Learn:\nMotor Encoders\nVariables";
+		break;
+    default:
+        document.getElementById('advancedLessonButtons').style.display = "none";
+        document.getElementById('advancedLessonText').innerText = "Select a Lesson to begin Learning!";
+        document.getElementById('advancedLessonText').parentElement.style.height = '';
+        break;
+    }
+}
+
+function runNoviceLessonCode() {
     var lessonName = "";
-    switch (document.getElementById('lessonSelect').value) {
+    switch (document.getElementById('noviceLessonSelect').value) {
+    case "0":
+        lessonName = "WhiteLine2Motors";
+        break;
+    case "1":
+        lessonName = "WhiteLine4Motors";
+        break;
+    case "2":
+        lessonName = "DriveRotate90";
+        break;
+    case "3":
+        lessonName = "DriveRotateSquare";
+        break;
+	case "4":
+		lessonName = "DriveRotateSquare";
+		break;
+	case "5":
+		lessonName = "DriveStrafeSquare";
+		break;
+	case "6":
+		lessonName = "DriveStrafeSquare";
+		break;
+	case "7":
+		lessonName = "WobblePos1";
+		break;
+	case "8":
+		lessonName = "WobblePos2";
+		break;
+	case "9": //No code
+		lessonName = "WobblePos3";
+		break;
+	case "10":
+        lessonName = "ShootHighGoal";
+		break;
+	case "11":
+        lessonName = "ShootPowerShots";
+		break;
+    }
+    stopProgram();
+    resetField();
+    //Load Lesson Code to Run
+    var client = new XMLHttpRequest();
+    client.open('GET', './blocks/lessons/' + lessonName + '.ftccode');
+    client.onload = function () {
+        var lessonCode = client.responseText;
+        if (lessonCode !== '')
+            initProgram(lessonCode);
+        startProgram();
+    }
+    client.send();
+}
+
+function runAdvancedLessonCode() {
+    var lessonName = "";
+    switch (document.getElementById('advancedLessonSelect').value) {
     case "0":
         lessonName = "WhiteLine2Motors";
         break;
@@ -894,11 +1021,97 @@ function runLessonCode() {
     client.send();
 }
 
-function playVideo(videoType) {
+function playNoviceVideo(videoType) {
     link = "";
     //videoType: 0 = howTo, 1 = hint, 2 = solution
     if (videoType == 1) {
-        switch (document.getElementById('lessonSelect').value) {
+        switch (document.getElementById('noviceLessonSelect').value) {
+        case "0":
+            link = "https://www.youtube.com/embed/dsTCiFjhQ5I";
+            break;
+        case "1":
+            link = "https://www.youtube.com/embed/dsTCiFjhQ5I";
+            break;
+        case "2":
+            link = "https://www.youtube.com/embed/fL5dnEIS7Q0";
+            break;
+        case "3":
+            link = "https://www.youtube.com/embed/q1MO994Kd80";
+            break;
+        case "4":
+            link = "https://www.youtube.com/embed/q1MO994Kd80"; //No video yet, this is a placeholder
+            break;
+        case "5":
+            link = "https://www.youtube.com/embed/knw1IWJkokQ";
+            break;
+        case "6":
+            link = "https://www.youtube.com/embed/knw1IWJkokQ"; //No video yet, this is a placeholder
+            break;
+        case "7":
+            link = "https://www.youtube.com/embed/XVH3WZxuSHs";
+            break;
+        case "8":
+            link = "https://www.youtube.com/embed/ex1qfJWyRU8";
+            break;
+        case "9":
+            link = "https://www.youtube.com/embed/Pi7oF-N5Ly4";
+            break;
+		case "10":
+			link = "https://www.youtube.com/embed/kvsQoz9zbe4";
+			break;
+		case "11":
+			link = "https://www.youtube.com/embed/kvsQoz9zbe4"; //No video yet, this is a placeholder
+			break;
+        }
+    } else if (videoType == 2) {
+        switch (document.getElementById('noviceLessonSelect').value) {
+		case "0":
+			link = "https://www.youtube.com/embed/zjNIo_V9qeI";
+			break;
+		case "1":
+			link = "https://www.youtube.com/embed/_GP9szrK2X0";
+			break;
+		case "2":
+			link = "https://www.youtube.com/embed/rjKW0KjpV4A";
+			break;
+		case "3":
+			link = "https://www.youtube.com/embed/IwP42URTFZw";
+			break;
+		case "4":
+			link = "https://www.youtube.com/embed/q1MO994Kd80"; //No video yet, this is a placeholder
+			break;
+		case "5":
+			link = "https://www.youtube.com/embed/knw1IWJkokQ"; //No video yet, this is a placeholder
+			break;
+		case "6":
+			link = "https://www.youtube.com/embed/knw1IWJkokQ"; //No video yet, this is a placeholder
+			break;
+		case "7":
+			link = "https://www.youtube.com/embed/XVH3WZxuSHs"; //No video yet, this is a placeholder
+			break;
+		case "8":
+			link = "https://www.youtube.com/embed/ex1qfJWyRU8"; //No video yet, this is a placeholder
+			break;
+		case "9":
+			link = "https://www.youtube.com/embed/Pi7oF-N5Ly4"; //No video yet, this is a placeholder
+			break;
+		case "10":
+			link = "https://www.youtube.com/embed/kvsQoz9zbe4"; //No video yet, this is a placeholder
+			break;
+		case "11":
+			link = "https://www.youtube.com/embed/kvsQoz9zbe4"; //No video yet, this is a placeholder
+			break;
+		}
+    } else
+        link = 'https://www.youtube.com/embed/HvywykxdrBU?list=PLszFVnnZcmarYReNB-qCSZLiu2l3Mvlvz';
+	openTab(link);
+}
+
+function playAdvancedVideo(videoType) {
+    link = "";
+    //videoType: 0 = howTo, 1 = hint, 2 = solution
+    if (videoType == 1) {
+        switch (document.getElementById('advancedLessonSelect').value) {
         case "0":
             link = "https://www.youtube.com/embed/x7BokrnYRVQ?list=PLszFVnnZcmarYReNB-qCSZLiu2l3Mvlvz";
             break;
@@ -931,7 +1144,7 @@ function playVideo(videoType) {
             break;
         }
     } else if (videoType == 2) {
-        switch (document.getElementById('lessonSelect').value) {
+        switch (document.getElementById('advancedLessonSelect').value) {
         case "0":
             link = "https://www.youtube.com/embed/ZgVQHswMonk?list=PLszFVnnZcmarYReNB-qCSZLiu2l3Mvlvz";
             break;
