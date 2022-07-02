@@ -1027,7 +1027,7 @@ function playNoviceVideo(videoType) {
     if (videoType == 1) {
         switch (document.getElementById('noviceLessonSelect').value) {
         case "0":
-            link = "https://www.youtube.com/embed/dsTCiFjhQ5I";
+            link = "https://www.youtube.com/embed/l-8o-Nf6W6s";
             break;
         case "1":
             link = "https://www.youtube.com/embed/dsTCiFjhQ5I";
@@ -1078,28 +1078,28 @@ function playNoviceVideo(videoType) {
 			link = "https://www.youtube.com/embed/IwP42URTFZw";
 			break;
 		case "4":
-			link = "https://www.youtube.com/embed/q1MO994Kd80"; //No video yet, this is a placeholder
+			link = "https://www.youtube.com/embed/edajkzBqivA";
 			break;
 		case "5":
-			link = "https://www.youtube.com/embed/knw1IWJkokQ"; //No video yet, this is a placeholder
+			link = "https://www.youtube.com/embed/zNni0P0jiL4"; //No video yet, this is a placeholder
 			break;
 		case "6":
 			link = "https://www.youtube.com/embed/knw1IWJkokQ"; //No video yet, this is a placeholder
 			break;
 		case "7":
-			link = "https://www.youtube.com/embed/XVH3WZxuSHs"; //No video yet, this is a placeholder
+			link = "https://www.youtube.com/embed/Xi_8rezCLdGU"; //No video yet, this is a placeholder
 			break;
 		case "8":
-			link = "https://www.youtube.com/embed/ex1qfJWyRU8"; //No video yet, this is a placeholder
+			link = "https://www.youtube.com/embed/Xi_8rezCLdGU"; //No video yet, this is a placeholder
 			break;
 		case "9":
-			link = "https://www.youtube.com/embed/Pi7oF-N5Ly4"; //No video yet, this is a placeholder
+			link = "https://www.youtube.com/embed/Xi_8rezCLdGU"; //No video yet, this is a placeholder
 			break;
 		case "10":
-			link = "https://www.youtube.com/embed/kvsQoz9zbe4"; //No video yet, this is a placeholder
+			link = "https://www.youtube.com/embed/c4gG98Y7I1o"; //No video yet, this is a placeholder
 			break;
 		case "11":
-			link = "https://www.youtube.com/embed/kvsQoz9zbe4"; //No video yet, this is a placeholder
+			link = "https://www.youtube.com/embed/Xz4f80o_InQ";
 			break;
 		}
     } else
