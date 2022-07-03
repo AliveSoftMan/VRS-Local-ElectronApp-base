@@ -11,6 +11,8 @@
 <script type="text/javascript" src="../unityInstanceHandler.js"></script>
 
 <body>
+  <input type="file" id="file" multiple />
+  <button id="read-file">Read File</button>
   <div id="unity-container" class="unity-desktop">
     <canvas id="unity-canvas" width=960 height=600></canvas>
     <div id="unity-loading-bar">
@@ -32,12 +34,12 @@
     var buildUrl = "Build";
     var loaderUrl = buildUrl + "/webgl.loader.js";
     var config = {
-      dataUrl: buildUrl + "/webgl.data.unityweb",
-      frameworkUrl: buildUrl + "/webgl.framework.js.unityweb",
-      codeUrl: buildUrl + "/webgl.wasm.unityweb",
+      dataUrl: buildUrl + "/webgl.data",
+      frameworkUrl: buildUrl + "/webgl.framework.js",
+      codeUrl: buildUrl + "/webgl.wasm",
       streamingAssetsUrl: "StreamingAssets",
-      companyName: "VirtualFTC",
-      productName: "Robot Simulator",
+      companyName: "DefaultCompany",
+      productName: "PrototypeImporter",
       productVersion: "0.1",
     };
 
@@ -65,20 +67,8 @@
         mobileWarning.style.display = "none";
       }, 5000);
     } else {
-      document.querySelector("#unity-footer").style.display = "none";
-
-      const resizeCanvas = () => {
-        const fieldView = parent.document.querySelector('#fieldView');
-
-        canvas.style.width = `${fieldView.offsetWidth}px`;
-        canvas.style.height = `${fieldView.offsetHeight}px`;
-      }
-
-      resizeCanvas();
-
-      window.addEventListener('resize', () => {
-        resizeCanvas();
-      })
+      canvas.style.width = "960px";
+      canvas.style.height = "600px";
     }
     loadingBar.style.display = "block";
 
@@ -164,8 +154,38 @@
       var motorPositions = "[" + frontLeftEncoder + ", " + frontRightEncoder + ", " + backLeftEncoder + ", " + backRightEncoder + "]";
       localStorage.setItem('motorCurrentPositions', motorPositions);
     }
-	  //Old Code (Lean off of using this)
+    //Old Code (Lean off of using this)
 
+    document.querySelector("#read-file").addEventListener('click', function () {
+      // no file selected to read
+      if (document.querySelector("#file").value == '') {
+        alert('No file selected');
+        return;
+      }
+      readmultifiles(document.querySelector("#file").files);
+    });
+
+    function readmultifiles(files) {
+      var reader = new FileReader();
+      function readFile(index) {
+        if (index >= files.length) return;
+        var file = files[index];
+        reader.onload = function (e) {
+          // get file content  
+          var bin = e.target.result;
+          if (file.name != "robotfile.urdf") {
+            bin = btoa(e.target.result)
+          }
+          var a = [file.name, bin]
+          UnityInstance.SendMessage("RobotManager", "receiveRobotFile", JSON.stringify({ name: file.name, data: bin }))
+          console.log(file.name + ": " + bin);
+          // do sth with bin
+          readFile(index + 1)
+        }
+        reader.readAsBinaryString(file);
+      }
+      readFile(0);
+    }
 
   </script>
 </body>
