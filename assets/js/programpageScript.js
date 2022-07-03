@@ -825,7 +825,7 @@ function loadNoviceLesson() {
         break;
 	case "7":
 		document.getElementById('noviceLessonText').innerText = "Difficulty: Medium\n" +
-			"Alright, now let's start getting some actual autonomous points. First off, let's put the wobble goal in the first position earning +15 points. The first position is the one closest to the robot's starting position. For right now, we can stick to timing but we can see it becomes a bit more unreliable the more we move." +
+			"Alright, now let's start getting some actual autonomous points. First off, let's put the wobble goal in the first position earning +15 points. The first position is the one closest to the robot's starting position. For right now, we can probably get away without using encoders, but it may be a little bit more unreliable." +
 			"\n\nYou'll Learn:\nHow to Handle Large Amounts of Code\nComplex Movement";
         break;
 	case "8":
@@ -1179,4 +1179,49 @@ function playAdvancedVideo(videoType) {
     } else
         link = 'https://www.youtube.com/embed/HvywykxdrBU?list=PLszFVnnZcmarYReNB-qCSZLiu2l3Mvlvz';
 	openTab(link);
+}
+
+function openNoviceSolutionCode() {
+	link = "";
+
+	switch (document.getElementById('noviceLessonSelect').value) {
+	case "0":
+		link = "https://docs.google.com/document/d/1H8yPcHmyWCdq8S8YIBL9QnbmZnTO1zw2Al5t-2Czv_Q/edit?usp=sharing"
+		break;
+	case "1":
+		link = "https://docs.google.com/document/d/1n0Av37i0I5aNHqHwzTVPWy05ooRdkWAqIacDv8cupBI/edit?usp=sharing"
+		break;
+	case "2":
+		link = "https://docs.google.com/document/d/1CMYAkFn2_n9VtqITHrfAWOwFYxvZNDVaWGz3fHo9Zzc/edit?usp=sharing"
+		break;
+	case "3":
+		link = "https://docs.google.com/document/d/1qlt-t0ZRuGSPJiQKTjaefx84D96Y7vOc42fkz96dwlA/edit?usp=sharing"
+		break;
+	case "4":
+		link = "https://docs.google.com/document/d/181XGdZbjcGh4OtC6lLm-yTaP4R3isH4u7AhcbxP8jP8/edit?usp=sharing"
+		break;
+	case "5":
+		link = "https://docs.google.com/document/d/12xHDOdgQ36BbnobDukudzfi9_MVOXttFfEZ70SzSesU/edit?usp=sharing"
+		break;
+	case "6":
+		link = "https://docs.google.com/document/d/1Qo1t1_3PlUutEeoomkaQLmKv40r328GCcxalC3FnVSE/edit?usp=sharing"
+		break;
+	case "7":
+		link = "https://docs.google.com/document/d/1lu4etDIYvsxD0qQcgqNcDP-A-sBWjh2IHaKoJBLV8fo/edit?usp=sharing"
+		break;
+	case "8":
+		link = "https://docs.google.com/document/d/1lu4etDIYvsxD0qQcgqNcDP-A-sBWjh2IHaKoJBLV8fo/edit?usp=sharing"
+		break;
+	case "9":
+		link = "https://docs.google.com/document/d/1HTMfnGF-VrG_Z-bO2v0J8k25IR2d3g6pfEAx1g8sdGM/edit?usp=sharing"
+		break;
+	case "10":
+		link = "https://docs.google.com/document/d/1DEI6IOQ1eqh-m35Brz67gpeHhNIci35mbXm0ynRSVzg/edit?usp=sharing"
+		break;
+	case "11":
+		link = "https://docs.google.com/document/d/1Wp4-t8bsrAbo0QtF4TrIfDTpGpdzf7GC0pZIj5sJmcM/edit?usp=sharing"
+		break;
+	}
+	window.open(
+		link, "_blank");
 }
