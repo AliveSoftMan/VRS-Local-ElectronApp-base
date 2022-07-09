@@ -175,10 +175,14 @@
           var bin = e.target.result;
           if (file.name != "robotfile.urdf") {
             bin = btoa(e.target.result)
+            while (bin.length != 0) {
+              UnityInstance.SendMessage("RobotManager", "receiveRobotFile", JSON.stringify({ name: file.name, data: bin.slice(0, 300000) }))
+              bin = bin.slice(300000);
+            }
+          } else {
+            UnityInstance.SendMessage("RobotManager", "receiveRobotFile", JSON.stringify({ name: file.name, data: bin }))
+            console.log(file.name + ": " + bin);
           }
-          var a = [file.name, bin]
-          UnityInstance.SendMessage("RobotManager", "receiveRobotFile", JSON.stringify({ name: file.name, data: bin }))
-          console.log(file.name + ": " + bin);
           // do sth with bin
           readFile(index + 1)
         }
