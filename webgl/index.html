@@ -13,6 +13,8 @@
 <body>
   <input type="file" id="file" multiple />
   <button id="read-file">Read File</button>
+  <button onclick="sendPower()">Set CMD</button>
+
   <div id="unity-container" class="unity-desktop">
     <canvas id="unity-canvas" width=960 height=600></canvas>
     <div id="unity-loading-bar">
@@ -31,12 +33,17 @@
     </div>
   </div>
   <script>
+
+    function sendPower() {
+      UnityInstance.SendMessage("RobotManager", "setFrontLeftVel", 0.5);
+    }
+
     var buildUrl = "Build";
-    var loaderUrl = buildUrl + "/webgl.loader.js";
+    var loaderUrl = buildUrl + "/source.loader.js";
     var config = {
-      dataUrl: buildUrl + "/webgl.data",
-      frameworkUrl: buildUrl + "/webgl.framework.js",
-      codeUrl: buildUrl + "/webgl.wasm",
+      dataUrl: buildUrl + "/source.data",
+      frameworkUrl: buildUrl + "/source.framework.js",
+      codeUrl: buildUrl + "/source.wasm",
       streamingAssetsUrl: "StreamingAssets",
       companyName: "DefaultCompany",
       productName: "PrototypeImporter",
@@ -78,7 +85,6 @@
       createUnityInstance(canvas, config, (progress) => {
         progressBarFull.style.width = 100 * progress + "%";
       }).then((unityInstance) => {
-        console.log("WROTE: " + unityInstance);
         UnityInstance = unityInstance;
 
         loadingBar.style.display = "none";
@@ -176,14 +182,14 @@
           if (file.name != "robotfile.urdf") {
             bin = btoa(e.target.result)
             while (bin.length != 0) {
-              UnityInstance.SendMessage("RobotManager", "receiveRobotFile", JSON.stringify({ name: file.name, data: bin.slice(0, 300000) }))
+              UnityInstance.SendMessage("RobotManager", "receiveRobotFile", JSON.stringify({ name: file.name, data: bin.slice(0, 200000) }))
               bin = bin.slice(300000);
+              console.log("File Name: " + file.name + "BIN: " + bin.length);
             }
           } else {
             UnityInstance.SendMessage("RobotManager", "receiveRobotFile", JSON.stringify({ name: file.name, data: bin }))
             console.log(file.name + ": " + bin);
           }
-          // do sth with bin
           readFile(index + 1)
         }
         reader.readAsBinaryString(file);
