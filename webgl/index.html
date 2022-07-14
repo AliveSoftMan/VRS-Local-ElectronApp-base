@@ -35,7 +35,10 @@
   <script>
 
     function sendPower() {
-      UnityInstance.SendMessage("RobotManager", "setFrontLeftVel", 0.5);
+      UnityInstance.SendMessage("RobotManager", "setFrontLeftVel", 1);
+      UnityInstance.SendMessage("RobotManager", "setFrontRightVel", 1);
+      UnityInstance.SendMessage("RobotManager", "setBackLeftVel", 1);
+      UnityInstance.SendMessage("RobotManager", "setBackRightVel", 1);
     }
 
     var buildUrl = "Build";
@@ -44,7 +47,7 @@
       dataUrl: buildUrl + "/source.data",
       frameworkUrl: buildUrl + "/source.framework.js",
       codeUrl: buildUrl + "/source.wasm",
-	  symbolsUrl: buildUrl + "/source.symbols.json",
+      symbolsUrl: buildUrl + "/source.symbols.json",
       streamingAssetsUrl: "StreamingAssets",
       companyName: "DefaultCompany",
       productName: "PrototypeImporter",

@@ -19,9 +19,9 @@ const gamepadBoxVars = {
 }
 
 const replaceJSString = [
-    ,[": number ", ""]
-    ,[": string ", ""]
-    , ["{}", "{\n}"]    
+    , [": number ", ""]
+    , [": string ", ""]
+    , ["{}", "{\n}"]
     , ['opModeIsActive', 'linearOpMode.opModeIsActive']
     , ['Range.clip(', 'range.clip(']
     // , ["JavaUtil.formatNumber(", "misc.formatNumber("]
@@ -119,10 +119,10 @@ const valueConverter = (str) => {
         const varName = values[1];
         return `colorSensor.getProperty(${colorVars[varName]}, 'Green')`
     }
-     else if (str.includes("getRuntime(")) {
+    else if (str.includes("getRuntime(")) {
         return str.replaceAll('getRuntime(', "linearOpMode.getRuntime(");
 
-    }else if (str.includes(".getDistance(")) {
+    } else if (str.includes(".getDistance(")) {
         let sides = str.split(".getDistance(")
         let colorIndex = 0
         Object.keys(colorData).map((color) => {
@@ -131,111 +131,111 @@ const valueConverter = (str) => {
         let value = getBracketContent(sides[1])
         return `colorSensor.getDistance(${colorData[colorIndex]}, ${value})`;
 
-    }else if(/gamepad(\d+)\.(\w+)_stick_(\w)/.test(str)){
+    } else if (/gamepad(\d+)\.(\w+)_stick_(\w)/.test(str)) {
         const gamepadV = /gamepad(\d+).(\w+)_stick_(\w)/.exec(str)
         const keyV = `${gamepadV[2]}_stick_${gamepadV[3]}`
         let returnStr = ""
-        if(gamepadValues[keyV]<4)
-            returnStr =  `gamepad.numberValue(${gamepadV[1]-1}, ${gamepadValues[keyV]})`
-        else 
-            returnStr =  `gamepad.boolValue(${gamepadV[1]-1}, ${gamepadValues[keyV]}, 'Both')`
+        if (gamepadValues[keyV] < 4)
+            returnStr = `gamepad.numberValue(${gamepadV[1] - 1}, ${gamepadValues[keyV]})`
+        else
+            returnStr = `gamepad.boolValue(${gamepadV[1] - 1}, ${gamepadValues[keyV]}, 'Both')`
         return returnStr
 
-    }else if(/gamepad(\d+).(a|b|c|d)/.test(str)){
+    } else if (/gamepad(\d+).(a|b|c|d)/.test(str)) {
         const values = /gamepad(\d+).(a|b|c|d)/.exec(str)
 
-        return `gamepad.boolValue(${values[1]-1}, ${gamepadBoxVars[values[2]]}, 'Xbox')`
+        return `gamepad.boolValue(${values[1] - 1}, ${gamepadBoxVars[values[2]]}, 'Xbox')`
     }
-    
-    else if(str.includes(".getPower()")){
+
+    else if (str.includes(".getPower()")) {
         const exeVars = /this.(\w+).getPower/.exec(str)
         let returnStr = str.replace("()", "")
         return returnStr.replaceAll(/this.(\w+).getPower/g, `motor.getProperty(${mortorVars[exeVars[1]]}, 'Power')`)
     }
-    else if(str.includes(".getGain()")){
+    else if (str.includes(".getGain()")) {
         const exeVars = /\(?this.(\w+)\)?.getGain\(\)/.exec(str)
         return str.replaceAll(/\(?this.(\w+)\)?.getGain\(\)/g, `colorSensor.getProperty(${colorVars[exeVars[1]]}, "Gain")`)
     }
-    else if(str.includes(".getNormalizedColors()")){
+    else if (str.includes(".getNormalizedColors()")) {
         const exeVars = /\(?this\.(\w+)\)?.getNormalizedColors\(\)/.exec(str)
         return str.replaceAll(/\(?this\.(\w+)\)?.getNormalizedColors\(\)/g, `JSON.parse(colorSensor.getNormalizedColors(${colorVars[exeVars[1]]}))`)
     }
-    else if(str.includes("DistanceUnit.")){
+    else if (str.includes("DistanceUnit.")) {
         const exeVars = /DistanceUnit.(\w+)/g.exec(str)
         return str.replaceAll(`DistanceUnit.${exeVars[1]}`, `'${exeVars[1]}'`)
     }
 
-    else if(/(\w+)\.toString\(\)/g.test(str)){
+    else if (/(\w+)\.toString\(\)/g.test(str)) {
         let values = /(\w+).toString\(\)/g.exec(str)
-        if(elapsedTimeVars[values[1]]){
+        if (elapsedTimeVars[values[1]]) {
             return str.replace(/(\w+).toString\(\)/g, `String(elapsedTime.toText(${values[1]}))`)
         }
     }
 
-    else if(/(\w+)\.seconds\(\)/g.test(str)){
+    else if (/(\w+)\.seconds\(\)/g.test(str)) {
         let values = /(\w+).seconds\(\)/g.exec(str)
-        if(elapsedTimeVars[values[1]]){
+        if (elapsedTimeVars[values[1]]) {
             return str.replace(/(\w+).seconds\(\)/g, `String(elapsedTime.get("Seconds", ${values[1]}))`)
         }
     }
 
-    else if(/(\w+)\.reset\(\)/g.test(str)){
+    else if (/(\w+)\.reset\(\)/g.test(str)) {
         let values = /(\w+).reset\(\)/g.exec(str)
-        if(elapsedTimeVars[values[1]]){
+        if (elapsedTimeVars[values[1]]) {
             return str.replace(/(\w+).reset\(\)/g, `elapsedTime.reset(${values[1]})`)
         }
     }
 
-    else if(/(\w+)\.toUnit\((\w+)\)/g.test(str)){
+    else if (/(\w+)\.toUnit\((\w+)\)/g.test(str)) {
         let values = /(\w+).toUnit\((\w+)\)/g.exec(str)
-        if(accelerateVars[values[1]]){
+        if (accelerateVars[values[1]]) {
             return str.replace(/(\w+).toUnit\((\w+)\)/g, `acceleration.toDistanceUnit(${values[1]}, "${values[2]}")`)
         }
     }
 
-    else if(str.includes(".getLightDetected()")){
+    else if (str.includes(".getLightDetected()")) {
         const values = /\(?this.(\w+)\)?.getLightDetected\(\)/g.exec(str)
         return str.replace(/\(?this.(\w+)\)?.getLightDetected\(\)/g, `colorSensor.getProperty(${colorVars[values[1]]}, "LightDetected")`)
     }
     // else if(/misc.formatNumber\((\w+).(\w+), (\d+)\)/.test(str)){
-    else if(/\bmisc\.formatNumber\((\w+)\.(\w+),/.test(str)){
+    else if (/\bmisc\.formatNumber\((\w+)\.(\w+),/.test(str)) {
         const values = /misc.formatNumber\((\w+).(\w+),/.exec(str)
         return str.replace(/misc.formatNumber\((\w+).(\w+),/, `misc.roundDecimal(colorUtil.normalized("${capitalize(values[2])}", ${values[1]}),`)
     }
 
-    else if(/\bmisc\.colorToValue\((\w+)\)/.test(str)){
+    else if (/\bmisc\.colorToValue\((\w+)\)/.test(str)) {
         const values = /misc\.colorToValue\((\w+)\)/.exec(str)
         return str.replace(/misc.colorToValue\((\w+)\)/, `colorUtil.get("Hue", ${values[1]})`)
     }
 
 
-    else if(/(\w+)\.toColor\(\)/.test(str)){
+    else if (/(\w+)\.toColor\(\)/.test(str)) {
         const values = /(\w+).toColor\(\)/.exec(str)
         return str.replace(/(\w+).toColor\(\)/, `colorUtil.normalized("Color", ${values[1]})`)
-    }    
-    
-    else if(/\bmisc.colorToHue\((\w+)\)/.test(str)){
+    }
+
+    else if (/\bmisc.colorToHue\((\w+)\)/.test(str)) {
         const values = /\bmisc.colorToHue\((\w+)\)/.exec(str)
         return str.replace(/\bmisc.colorToHue\((\w+)\)/, `colorUtil.get("Hue", ${values[1]})`)
     }
 
-    else if(/\bmisc\.colorToSaturation\((\w+)\)/.test(str)){
+    else if (/\bmisc\.colorToSaturation\((\w+)\)/.test(str)) {
         const values = /\bmisc\.colorToSaturation\((\w+)\)/.exec(str)
         return str.replace(/\bmisc\.colorToSaturation\((\w+)\)/, `colorUtil.get("Saturation", ${values[1]})`)
     }
 
-    else if(/\bmisc.formatNumber\(/.test(str)){
+    else if (/\bmisc.formatNumber\(/.test(str)) {
         return str.replace(/\bmisc.formatNumber\(/, "misc.roundDecimal(")
     }
 
-    else if(/\bColor\.parseColor\("(\w+)"\)/.test(str)){
+    else if (/\bColor\.parseColor\("(\w+)"\)/.test(str)) {
         const values = /\bColor\.parseColor\("(\w+)"\)/.exec(str)
         console.log("color values : ", values)
         return str.replace(/\bColor\.parseColor\("(\w+)"\)/, `colorUtil.textToColor('${values[1]}')`)
     }
 
-    
-    
+
+
     return str
 }
 const capitalize = (str) => {
@@ -276,7 +276,7 @@ const customConvert = (str) => {
             mortorVars[varName] = directions[varValue];
         else if (hardmaps[2] == 'ColorSensor')
             colorVars[varName] = colorData[varValue];
-            console.log("color bars : ", colorVars)
+        console.log("color bars : ", colorVars)
         return "";
     }
 
@@ -302,23 +302,25 @@ const customConvert = (str) => {
         return str.replace('waitForStart', 'await linearOpMode.waitForStart');
     }
     else if (str.includes('.setPower(')) {
-        let matches = /this.(\w+).setPower\((.*)\);/g.exec(result);
+        let matches = /(this.)?(\w+).setPower\((.*)\);/g.exec(result);
+        console.log("MATCHES : " + matches[1], matches[2]);
         const varName = matches[1];
         const value = valueChecker(matches[2]);
-        return `motor.setProperty([${mortorVars[varName]}], 'Power', [${value?value:0}]);`;
+        return `motor.setProperty([${mortorVars[varName]}], 'Power', [${value ? value : 0}]);`;
     }
-    else if (str.includes('setMode(')) {        
+    else if (str.includes('setMode(')) {
         let hardmaps = /this.(\w+).setMode\(DcMotor.RunMode.(\w+)\);/g.exec(str);
         const varName = hardmaps[1];
         const value = hardmaps[2];
         return `motor.setProperty([${mortorVars[varName]}], 'Mode', ['${value}']);`;
     }
     else if (str.includes('setTargetPosition(')) {
-        let matches = /this.(\w+).setTargetPosition\((.*)\);/g.exec(str);
+        let matches = /(this.)?(\w+).setTargetPosition\((.*)\);/g.exec(str);
         const varName = matches[1];
         const value = valueChecker(matches[2]);
-        return `motor.setProperty([${mortorVars[varName]}], 'TargetPosition', [${value?value:0}]);`;
-    }    
+        return `motor.setProperty([${mortorVars[varName]}], 'TargetPosition', [${value ? value : 0}]);`;
+    }
+
     else if (str.includes('setZeroPowerBehavior(')) {
         let regStr = result.replaceAll(`(`, "OOO").replaceAll(`)`, "CCC");
         let matches = /this.(\w+).setZeroPowerBehavior\(DcMotor.ZeroPowerBehavior.(\w+)\);/g.exec(regStr);
@@ -331,16 +333,16 @@ const customConvert = (str) => {
         let matches = /this.(\w+).setTargetPositionTolerance\((.*)\);/g.exec(str);
         const varName = matches[1];
         const value = valueChecker(matches[2]);
-        return `motor.setProperty([${mortorVars[varName]}], 'TargetPositionTolerance', [${value?value:0}]);`;
+        return `motor.setProperty([${mortorVars[varName]}], 'TargetPositionTolerance', [${value ? value : 0}]);`;
     }
 
-    else if(str.includes(".setGain(")){
+    else if (str.includes(".setGain(")) {
         const values = /\(?this.(\w+)\)?.setGain\((\w+)\)/.exec(str)
         return str.replace(/\(?this.(\w+)\)?.setGain\((\w+)\)/, `colorSensor.setProperty(${colorVars[values[1]]}, "Gain", ${values[2]})`);
     }
 
 
-    else if(/\bmisc\.showColor\((.*), (.*)\);/.test(str)){
+    else if (/\bmisc\.showColor\((.*), (.*)\);/.test(str)) {
         const values = /\bmisc\.showColor\((.*), (.*)\);/.exec(str)
         return str.replace(/\bmisc\.showColor\((.*), (.*)\);/, `colorUtil.showColor( ${valueChecker(values[2])});`)
     }
@@ -418,7 +420,7 @@ async function convert_2js(url, javaCode, callback) {
 
             })
 
-        
+
 
         replaceJSString.map(word => {
             result = result.replaceAll(word[0], word[1])
@@ -429,14 +431,14 @@ async function convert_2js(url, javaCode, callback) {
         result = result.replaceAll(/<(\w+)>/g, "")
         result = result.replaceAll(/\bparseFloat\b/g, "")
         result = result.replaceAll(/\bJavaUtil./g, "misc.")
-        
 
 
-        if(/export class (\w+) extends LinearOpMode\b/g.test(result)){
+
+        if (/export class (\w+) extends LinearOpMode\b/g.test(result)) {
             OpMode = "LinearOpMode"
-        }else if(/export class (\w+) extends OpMode\b/g.test(result)){
+        } else if (/export class (\w+) extends OpMode\b/g.test(result)) {
             OpMode = "OpMode"
-        }else
+        } else
             return "Parse Error"
 
         console.log(OpMode)
@@ -445,7 +447,7 @@ async function convert_2js(url, javaCode, callback) {
             lineTxt = result[i].trim();
             var middleVars = /\bDistanceUnit.(\w+)/g.exec(lineTxt)
             // partial remove vars
-            if(middleVars){
+            if (middleVars) {
                 lineTxt = lineTxt.replace(/\bDistanceUnit.(\w+)/g, `"${middleVars[1]}"`)
             }
 
@@ -453,7 +455,7 @@ async function convert_2js(url, javaCode, callback) {
             // var 
             if (brackets == 1 && !funcName) {
                 const values = /(public)? (\w+)\((.*)\)(: void)? {/g.exec(lineTxt)
-                funcName =   values[2];
+                funcName = values[2];
                 funcBlocks[funcName] = [];
                 funcValues[funcName] = values[3];
             } else if (brackets > 0) {
@@ -517,7 +519,7 @@ async function convert_2js(url, javaCode, callback) {
             await runOpMode();`
 
 
-        jsString  = js_beautify(jsString)
+        jsString = js_beautify(jsString)
 
     } catch (e) {
         console.log(lineTxt)
@@ -525,6 +527,8 @@ async function convert_2js(url, javaCode, callback) {
         callback("parse error", e)
     }
 
+    console.log("RAW SOURCE: " + rawSource)
+    console.log("JS  STRING: " + jsString)
     callback(rawSource, jsString)
 
 }
