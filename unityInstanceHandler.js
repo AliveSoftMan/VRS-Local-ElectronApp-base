@@ -4,7 +4,7 @@ function check() {
     if (UnityInstance != null) {
         var playMode = localStorage.getItem('playMode');
         if (playMode == "Autonomous" && !alreadySetPlayMode) {
-            UnityInstance.SendMessage("Main Menu", "changeSinglePlayer");
+            // UnityInstance.SendMessage("Main Menu", "changeSinglePlayer");
             alreadySetPlayMode = true;
         } else if (playMode == "TeleOp" && !alreadySetPlayMode) {
             // alert("VRS Multiplayer is optimized with fullscreen mode. Please click on the blue button below the game window.");
@@ -22,13 +22,13 @@ check();
 
 function writeMotorPowers() {
     if (localStorage.getItem('startMatch') == 'true') {
-        UnityInstance.SendMessage("FieldManager", "buttonStartGame");
+        // UnityInstance.SendMessage("FieldManager", "buttonStartGame");
         localStorage.setItem('startMatch', false);
     } else if (localStorage.getItem('stopMatch') == 'true') {
-        UnityInstance.SendMessage("FieldManager", "buttonStopGame");
+        // UnityInstance.SendMessage("FieldManager", "buttonStopGame");
         localStorage.setItem('stopMatch', false);
     } else if (localStorage.getItem('resetField') == 'true') {
-        UnityInstance.SendMessage("FieldManager", "resetField");
+        // UnityInstance.SendMessage("FieldManager", "resetField");
         localStorage.setItem('resetField', false);
     }
 
