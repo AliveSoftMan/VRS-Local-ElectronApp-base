@@ -340,13 +340,13 @@
 			cursor: pointer;
 		}
 
-		#RobotConfig:hover {
+		#RobotConfig:hover, #SignIn:hover {
 			transition-duration: 0.4s;
 			border: .15vw white solid;
 			text-shadow: .2vw .2vw .25vw #000000;
 		}
 
-		#RobotConfig:focus {
+		#RobotConfig:focus, #SignIn:focus {
 			transition-duration: 0.4s;
 			border: .15vw white solid;
 			text-shadow: .2vw .2vw .25vw #000000;
@@ -354,7 +354,28 @@
 			box-shadow: none;
 		}
 
-		#ConfigText {
+		#SignIn {
+			/* Auto layout */
+			display: flex;
+			flex-direction: row;
+			justify-content: center;
+			align-items: center;
+
+			position: absolute;
+			width: 17vw;
+			height: 6.5vh;
+			left: inherit;
+			top: 68vh;
+
+			/* Linear Style 1 */
+			background: linear-gradient(267.66deg, #FF7300 -14.49%, #FF2702 112.73%);
+			border-radius: 100px;
+
+			border: none;
+			cursor: pointer;
+		}
+
+		#ConfigText, #SignInText {
 			/* Button text */
 
 			font-family: Jura;
@@ -381,7 +402,7 @@
 			height: 10vh;
 			width: 17vw;
 			left: inherit;
-			top: 67.5vh;
+			top: 75.5vh;
 
 			/* Nav Buttons */
 			font-family: Jura;
@@ -612,6 +633,25 @@
 		<button onClick="nextPage('configpage.html')" id="RobotConfig">
 			<div id="ConfigText">Robot Configuration</div>
 		</button>
+		<br>
+		<button id="SignIn">
+			<div id="g_id_onload"
+				data-client_id="1089272278877-rhnl6uenbnsk1gkuhu3jb7kedn2suto5.apps.googleusercontent.com"
+				data-context="signin"
+				data-ux_mode="popup"
+				data-callback="handleCredentialResponse"
+				data-auto_prompt="false">
+			</div>
+
+			<div class="g_id_signin"
+				data-type="standard"
+				data-shape="pill"
+				data-theme="outline"
+				data-text="signin_with"
+				data-size="large"
+				data-logo_alignment="left">
+			</div>
+		</button>
 		<div id="VersionText">Version 1.3.0 - 6/6/2022</div>
 	</div>
 	<div id="NavItems">
@@ -655,7 +695,13 @@
 			</div>
 		</div>
 	</div>
-
+	<script src="https://accounts.google.com/gsi/client" async defer></script>
+	<script>
+		function handleCredentialResponse(response) {
+			console.log("credentials recieved")
+			console.log(response)
+		}
+	  </script>
 	<script>
 		document.body.style.background = "#242424";
 		
@@ -732,7 +778,6 @@
 				bttnLink.click();
 			}, 1005);
 		}
-
 	</script>
 </body>
 
