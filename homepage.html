@@ -698,8 +698,14 @@
 	<script src="https://accounts.google.com/gsi/client" async defer></script>
 	<script>
 		function handleCredentialResponse(response) {
-			console.log("credentials recieved")
+			console.log("Response recieved")
 			console.log(response)
+			var decoded = JSON.parse(atob(response.credential.split('.')[1]))
+			console.log(decoded)
+			console.log("Subject: " + decoded.sub)
+			console.log("Email: " + decoded.email)
+			console.log("Name: " + decoded.name)
+			
 		}
 	  </script>
 	<script>
