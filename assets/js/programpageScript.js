@@ -788,6 +788,21 @@ function loadNoviceLesson() {
     document.getElementById('noviceLessonButtons').style.display = "flex";
     document.getElementById('noviceLessonText').parentElement.style.height = '75%';
     switch (document.getElementById('noviceLessonSelect').value) {
+	case "0":
+		document.getElementById('noviceLessonText').innerText = "Difficulty: Easy\n" +
+			"In this first lesson, you will need to power the Front Left and Front Right Wheels for a certain amount of time in order to get the robot on the White Line for +5 Points during Autonomous. Press the \"Show the Task\" button to see what you need to do or \"Video Hint\" for an introduction." +
+			"\n\nYou'll Learn:\nBasic Motor Powering\nMovement Timing";
+		break;
+	case "1":
+		document.getElementById('noviceLessonText').innerText = "Difficulty: Easy\n" +
+			"The next stage will now be to add power to all 4 Wheels in your program. This will require a bit more precision, but will benefit with the added Torque and Speed the motors will provide. Your robot can have a max of 8 motors and 12 servos for full movement!" +
+			"\n\nYou'll Learn:\nBalance between Speed and Reliability\nMore Motor Control";
+		break;
+	case "2":
+		document.getElementById('noviceLessonText').innerText = "Difficulty: Easy\n" +
+			"For this lesson, we will be adding more than just forwards and backwards and introducing rotation! This may require alot more precision than you initially think. If only there was a way of consistently moving..." +
+			"\n\nYou'll Learn:\nThe Limits to using Timing\nRotation Basics";
+		break;
     case "3":
         document.getElementById('noviceLessonText').innerText = "Difficulty: Medium\n" +
             "Let's make the robot go along the path of the strongest shape: the Square! Or was it the triangle? More experienced users can consider using the sensors in the IMU to produce more consistent behavior. Don't worry though: you can still accomplish the objective without using the IMU!" +
