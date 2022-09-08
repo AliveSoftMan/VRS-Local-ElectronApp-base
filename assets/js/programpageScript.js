@@ -932,6 +932,33 @@ function runNoviceLessonCode() {
     case "2":
         lessonName = "DriveRotate90";
         break;
+    case "3":
+        lessonName = "DriveRotateSquare";
+        break;
+	case "4":
+		lessonName = "DriveRotateSquare";
+		break;
+	case "5":
+		lessonName = "DriveStrafeSquare";
+		break;
+	case "6":
+		lessonName = "DriveStrafeSquare";
+		break;
+	case "7":
+		lessonName = "WobblePos1";
+		break;
+	case "8":
+		lessonName = "WobblePos2";
+		break;
+	case "9": //No code
+		lessonName = "WobblePos3";
+		break;
+	case "10":
+        lessonName = "ShootHighGoal";
+		break;
+	case "11":
+        lessonName = "ShootPowerShots";
+		break;
     }
     stopProgram();
     resetField();
@@ -950,6 +977,15 @@ function runNoviceLessonCode() {
 function runAdvancedLessonCode() {
     var lessonName = "";
     switch (document.getElementById('advancedLessonSelect').value) {
+    case "0":
+        lessonName = "WhiteLine2Motors";
+        break;
+    case "1":
+        lessonName = "WhiteLine4Motors";
+        break;
+    case "2":
+        lessonName = "DriveRotate90";
+        break;
     case "3":
         lessonName = "DriveRotateSquare";
         break;
@@ -992,27 +1028,81 @@ function playNoviceVideo(videoType) {
     if (videoType == 1) {
         switch (document.getElementById('noviceLessonSelect').value) {
         case "0":
-            link = "https://www.youtube.com/embed/x7BokrnYRVQ?list=PLszFVnnZcmarYReNB-qCSZLiu2l3Mvlvz";
+            link = "https://www.youtube.com/embed/l-8o-Nf6W6s";
             break;
         case "1":
-            link = "https://www.youtube.com/embed/c4eEeLBST9A?list=PLszFVnnZcmarYReNB-qCSZLiu2l3Mvlvz";
+            link = "https://www.youtube.com/embed/dsTCiFjhQ5I";
             break;
         case "2":
-            link = "https://www.youtube.com/embed/Mwt1i6DcoAw?list=PLszFVnnZcmarYReNB-qCSZLiu2l3Mvlvz";
+            link = "https://www.youtube.com/embed/fL5dnEIS7Q0";
             break;
+        case "3":
+            link = "https://www.youtube.com/embed/q1MO994Kd80";
+            break;
+        case "4":
+            link = "https://www.youtube.com/embed/q1MO994Kd80"; //No video yet, this is a placeholder
+            break;
+        case "5":
+            link = "https://www.youtube.com/embed/knw1IWJkokQ";
+            break;
+        case "6":
+            link = "https://www.youtube.com/embed/knw1IWJkokQ"; //No video yet, this is a placeholder
+            break;
+        case "7":
+            link = "https://www.youtube.com/embed/XVH3WZxuSHs";
+            break;
+        case "8":
+            link = "https://www.youtube.com/embed/ex1qfJWyRU8";
+            break;
+        case "9":
+            link = "https://www.youtube.com/embed/Pi7oF-N5Ly4";
+            break;
+		case "10":
+			link = "https://www.youtube.com/embed/kvsQoz9zbe4";
+			break;
+		case "11":
+			link = "https://www.youtube.com/embed/kvsQoz9zbe4"; //No video yet, this is a placeholder
+			break;
         }
     } else if (videoType == 2) {
         switch (document.getElementById('noviceLessonSelect').value) {
-        case "0":
-            link = "https://www.youtube.com/embed/ZgVQHswMonk?list=PLszFVnnZcmarYReNB-qCSZLiu2l3Mvlvz";
-            break;
-        case "1":
-            link = "https://www.youtube.com/embed/Q-C3vVFQS10?list=PLszFVnnZcmarYReNB-qCSZLiu2l3Mvlvz";
-            break;
-        case "2":
-            link = "https://www.youtube.com/embed/nx4PnIYA7ns?list=PLszFVnnZcmarYReNB-qCSZLiu2l3Mvlvz";
-            break;
-        }
+		case "0":
+			link = "https://www.youtube.com/embed/zjNIo_V9qeI";
+			break;
+		case "1":
+			link = "https://www.youtube.com/embed/_GP9szrK2X0";
+			break;
+		case "2":
+			link = "https://www.youtube.com/embed/rjKW0KjpV4A";
+			break;
+		case "3":
+			link = "https://www.youtube.com/embed/IwP42URTFZw";
+			break;
+		case "4":
+			link = "https://www.youtube.com/embed/edajkzBqivA";
+			break;
+		case "5":
+			link = "https://www.youtube.com/embed/zNni0P0jiL4"; //No video yet, this is a placeholder
+			break;
+		case "6":
+			link = "https://www.youtube.com/embed/knw1IWJkokQ"; //No video yet, this is a placeholder
+			break;
+		case "7":
+			link = "https://www.youtube.com/embed/Xi_8rezCLdGU"; //No video yet, this is a placeholder
+			break;
+		case "8":
+			link = "https://www.youtube.com/embed/Xi_8rezCLdGU"; //No video yet, this is a placeholder
+			break;
+		case "9":
+			link = "https://www.youtube.com/embed/Xi_8rezCLdGU"; //No video yet, this is a placeholder
+			break;
+		case "10":
+			link = "https://www.youtube.com/embed/c4gG98Y7I1o"; //No video yet, this is a placeholder
+			break;
+		case "11":
+			link = "https://www.youtube.com/embed/Xz4f80o_InQ";
+			break;
+		}
     } else
         link = 'https://www.youtube.com/embed/HvywykxdrBU?list=PLszFVnnZcmarYReNB-qCSZLiu2l3Mvlvz';
 	openTab(link);
@@ -1021,8 +1111,17 @@ function playNoviceVideo(videoType) {
 function playAdvancedVideo(videoType) {
     link = "";
     //videoType: 0 = howTo, 1 = hint, 2 = solution
-	if (videoType == 1) {
+    if (videoType == 1) {
         switch (document.getElementById('advancedLessonSelect').value) {
+        case "0":
+            link = "https://www.youtube.com/embed/x7BokrnYRVQ?list=PLszFVnnZcmarYReNB-qCSZLiu2l3Mvlvz";
+            break;
+        case "1":
+            link = "https://www.youtube.com/embed/c4eEeLBST9A?list=PLszFVnnZcmarYReNB-qCSZLiu2l3Mvlvz";
+            break;
+        case "2":
+            link = "https://www.youtube.com/embed/Mwt1i6DcoAw?list=PLszFVnnZcmarYReNB-qCSZLiu2l3Mvlvz";
+            break;
         case "3":
             link = "https://www.youtube.com/embed/T7qsSIdD1d4?list=PLszFVnnZcmarYReNB-qCSZLiu2l3Mvlvz";
             break;
@@ -1047,6 +1146,15 @@ function playAdvancedVideo(videoType) {
         }
     } else if (videoType == 2) {
         switch (document.getElementById('advancedLessonSelect').value) {
+        case "0":
+            link = "https://www.youtube.com/embed/ZgVQHswMonk?list=PLszFVnnZcmarYReNB-qCSZLiu2l3Mvlvz";
+            break;
+        case "1":
+            link = "https://www.youtube.com/embed/Q-C3vVFQS10?list=PLszFVnnZcmarYReNB-qCSZLiu2l3Mvlvz";
+            break;
+        case "2":
+            link = "https://www.youtube.com/embed/nx4PnIYA7ns?list=PLszFVnnZcmarYReNB-qCSZLiu2l3Mvlvz";
+            break;
         case "3":
             link = "https://www.youtube.com/embed/MXjoF2XXLAE?list=PLszFVnnZcmarYReNB-qCSZLiu2l3Mvlvz";
             break;
