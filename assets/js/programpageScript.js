@@ -922,7 +922,7 @@ function loadAdvancedLesson() {
 
 function runNoviceLessonCode() {
     var lessonName = "";
-    switch (document.getElementById('lessonSelectNovice').value) {
+    switch (document.getElementById('noviceLessonSelect').value) {
     case "0":
         lessonName = "WhiteLine2Motors";
         break;
@@ -949,7 +949,7 @@ function runNoviceLessonCode() {
 
 function runAdvancedLessonCode() {
     var lessonName = "";
-    switch (document.getElementById('lessonSelectAdvanced').value) {
+    switch (document.getElementById('advancedLessonSelect').value) {
     case "3":
         lessonName = "DriveRotateSquare";
         break;
@@ -990,7 +990,7 @@ function playNoviceVideo(videoType) {
     link = "";
     //videoType: 0 = howTo, 1 = hint, 2 = solution
     if (videoType == 1) {
-        switch (document.getElementById('lessonSelectNovice').value) {
+        switch (document.getElementById('noviceLessonSelect').value) {
         case "0":
             link = "https://www.youtube.com/embed/x7BokrnYRVQ?list=PLszFVnnZcmarYReNB-qCSZLiu2l3Mvlvz";
             break;
@@ -1002,7 +1002,7 @@ function playNoviceVideo(videoType) {
             break;
         }
     } else if (videoType == 2) {
-        switch (document.getElementById('lessonSelectNovice').value) {
+        switch (document.getElementById('noviceLessonSelect').value) {
         case "0":
             link = "https://www.youtube.com/embed/ZgVQHswMonk?list=PLszFVnnZcmarYReNB-qCSZLiu2l3Mvlvz";
             break;
@@ -1022,7 +1022,7 @@ function playAdvancedVideo(videoType) {
     link = "";
     //videoType: 0 = howTo, 1 = hint, 2 = solution
 	if (videoType == 1) {
-        switch (document.getElementById('lessonSelectAdvanced').value) {
+        switch (document.getElementById('advancedLessonSelect').value) {
         case "3":
             link = "https://www.youtube.com/embed/T7qsSIdD1d4?list=PLszFVnnZcmarYReNB-qCSZLiu2l3Mvlvz";
             break;
@@ -1046,7 +1046,7 @@ function playAdvancedVideo(videoType) {
             break;
         }
     } else if (videoType == 2) {
-        switch (document.getElementById('lessonSelectAdvanced').value) {
+        switch (document.getElementById('advancedLessonSelect').value) {
         case "3":
             link = "https://www.youtube.com/embed/MXjoF2XXLAE?list=PLszFVnnZcmarYReNB-qCSZLiu2l3Mvlvz";
             break;
