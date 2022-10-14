@@ -18171,4 +18171,3 @@
 	return lib;
 
 }));
-//# sourceMappingURL=java-to-javascript.js.map

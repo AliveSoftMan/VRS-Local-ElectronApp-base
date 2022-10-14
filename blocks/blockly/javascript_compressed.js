@@ -193,5 +193,3 @@
     return Blockly.JavaScript;
 }));
 
-
-  //# sourceMappingURL=javascript_compressed.js.map

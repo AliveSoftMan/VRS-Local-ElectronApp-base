@@ -6,10 +6,6 @@ var lastSaved = null;
 
 //---Sending Data to Unity---
 const abortedMsg = "aborted";
-localStorage.setItem('startMatch', false);
-localStorage.setItem('stopMatch', false);
-localStorage.setItem('resetField', false);
-localStorage.setItem('playMode', "Autonomous");
 
 //---Prompts---
 var overlayReturned = null;
@@ -31,18 +27,7 @@ window.prompt = function overlayPrompt(message, placeholder) {
 	});
 }
 
-//---Gamepad Connections---
-window.addEventListener("gamepadconnected", (event) => {
-	if (event.gamepad.index < 2) {
-		document.getElementById("telemetryText").innerText = 'New Controller: "' + event.gamepad.id + '".\nSet Controller to gamepad' + (event.gamepad.index + 1) + ".";
-	}
-});
 
-window.addEventListener("gamepaddisconnected", (event) => {
-	if (event.gamepad.index < 2) {
-		document.getElementById("telemetryText").innerText = 'Controller disconnected: "' + event.gamepad.id + '".\nGamepad' + (event.gamepad.index + 1) + " lost.";
-	}
-});
 
 //---Functions for OnBotJava---
 function getSelectedRange() {
@@ -184,14 +169,6 @@ function sampleProgram(blockProgram) {
 	overlay(false, 0);
 }
 
-//"Upload Program"
-document.getElementById('filePrompt').addEventListener('change', function () {
-	var fileReader = new FileReader();
-	fileReader.onload = function () {
-		uploadProgram(document.getElementById('filePrompt').files[0].name, fileReader.result);
-	}
-	fileReader.readAsText(document.getElementById('filePrompt').files[0]);
-});
 
 function uploadProgram(programName, content) {
 	document.getElementById('filePrompt').value = '';
@@ -551,4 +528,37 @@ function resetProgramExecution() {
 	resetProperties();
 	document.getElementById('programInit').style.display = 'inline-block';
 	document.getElementById('programStartStop').style.display = 'none';
+}
+
+
+function program_exec_script(params) {
+	
+	localStorage.setItem('startMatch', false);
+	localStorage.setItem('stopMatch', false);
+	localStorage.setItem('resetField', false);
+	localStorage.setItem('playMode', "Autonomous");
+
+	//---Gamepad Connections---
+	window.addEventListener("gamepadconnected", (event) => {
+		if (event.gamepad.index < 2) {
+			document.getElementById("telemetryText").innerText = 'New Controller: "' + event.gamepad.id + '".\nSet Controller to gamepad' + (event.gamepad.index + 1) + ".";
+		}
+	});
+
+	window.addEventListener("gamepaddisconnected", (event) => {
+		if (event.gamepad.index < 2) {
+			document.getElementById("telemetryText").innerText = 'Controller disconnected: "' + event.gamepad.id + '".\nGamepad' + (event.gamepad.index + 1) + " lost.";
+		}
+	});
+
+	//"Upload Program"
+	document.getElementById('filePrompt').addEventListener('change', function () {
+		var fileReader = new FileReader();
+		fileReader.onload = function () {
+			uploadProgram(document.getElementById('filePrompt').files[0].name, fileReader.result);
+		}
+		fileReader.readAsText(document.getElementById('filePrompt').files[0]);
+	});
+
+	
 }

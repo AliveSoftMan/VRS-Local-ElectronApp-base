@@ -4,16 +4,7 @@ var robotConfig = null;
 var defaultBot = true;
 
 var client = new XMLHttpRequest();
-client.open('GET', './config_files/defaultRobot.json');
-client.onload = function () {
-	var robotConfigTxt = client.responseText;
-	if (robotConfigTxt !== '' && robotConfig == null) {
-		robotConfig = JSON.parse(robotConfigTxt);
 
-		setTimeout(variableUpdate, 1);
-	}
-}
-client.send();
 
 //Dropdowns for Blocks Programs
 function createDcMotorDropdown() {
@@ -337,4 +328,18 @@ function displayLastSaved() {
 		settingUp = 0;
 		document.getElementById('programLoading').remove();
 	}
+}
+
+
+function config_setup(params) {
+	client.open('GET', './config_files/defaultRobot.json');
+	client.onload = function () {
+		var robotConfigTxt = client.responseText;
+		if (robotConfigTxt !== '' && robotConfig == null) {
+			robotConfig = JSON.parse(robotConfigTxt);
+
+			setTimeout(variableUpdate, 1);
+		}
+	}
+	client.send();
 }

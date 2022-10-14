@@ -1,25 +1,8 @@
-//Wait for 3 HttpRequests and then load last saved program
-settingUp = 4;
+
 
 //Loads Toolbox XML
 var clientToolbox = new XMLHttpRequest();
-clientToolbox.open('GET', './blocks/toolbox.xml');
-clientToolbox.onload = function () {
-    var toolboxTxt = clientToolbox.responseText;
-    if (toolboxTxt !== '' && !document.getElementById('toolbox')) {
-		toolboxLoaded(toolboxTxt);
-		
-		//Loads Default Programs and Eventually Last Saved
-		document.getElementById("javaSelect").value = 'BlankLinearOpMode';
-		sampleProgram(false);
-		document.getElementById("blockSelect").value = 'BasicAutoOpMode';
-		sampleProgram(true);
-		setTimeout(displayLastSaved, 100);
-		
-		setTimeout(setupCategories, 250);
-    }
-}
-clientToolbox.send();
+
 
 
 //---Loading Screen for Unity---
@@ -54,7 +37,6 @@ const updateLoadingText = async() => {
 		await delay(500);
 	}
 }
-updateLoadingText();
 
 //---Resize Screens---
 
@@ -65,9 +47,9 @@ if (navigator.userAgent.toLowerCase().indexOf(' electron/') > -1) {
 }
 
 //Resizing Main Windows
-resizeScreens();
 var screenSize;
 function resizeScreens() {
+	console.log("peter: resize screen")
 	screenSize = [.5 * document.body.clientWidth, window.innerHeight / 2 - 30];
 	//Width
 	document.getElementById('leftScreen').style.width = screenSize[0] + "px";
@@ -83,14 +65,6 @@ function resizeScreens() {
 	}
 }
 
-document.getElementById('middleSlider').addEventListener('mousedown',
-	function () { startResize("ew-resize", [resizeMiddle]); });
-
-document.getElementById('rightSlider').addEventListener('mousedown',
-	function () { startResize("ns-resize", [resizeRight]); });
-
-document.getElementById('multiSlider').addEventListener('mousedown',
-	function () { startResize("move", [resizeMiddle, resizeRight]); });
 
 function resizeMiddle(event) {
 	screenSize[0] += event.movementX * resizeMult;
@@ -136,28 +110,6 @@ function closeTab() {
 	document.getElementById('tabOverlay').style.animation = "tabHide .33s ease 1 normal forwards"
 }
 
-document.getElementById('tabMovable').addEventListener('mousedown',
-	function () { startResize("move", [tabMove]); });
-	
-document.getElementById('leftGrabTab').addEventListener('mousedown',
-	function () { startResize("ew-resize", [leftTabResize]); });
-	
-document.getElementById('rightGrabTab').addEventListener('mousedown',
-	function () { startResize("ew-resize", [rightTabResize]); });
-	
-document.getElementById('topGrabTab').addEventListener('mousedown',
-	function () { startResize("ns-resize", [topTabResize]); });
-document.getElementById('topLeftGrabTab').addEventListener('mousedown',
-	function () { startResize("nwse-resize", [topTabResize]); });
-document.getElementById('topRightGrabTab').addEventListener('mousedown',
-	function () { startResize("nesw-resize", [topTabResize]); });
-	
-document.getElementById('bottomGrabTab').addEventListener('mousedown',
-	function () { startResize("ns-resize", [bottomTabResize]); });
-document.getElementById('bottomLeftGrabTab').addEventListener('mousedown',
-	function () { startResize("nesw-resize", [bottomTabResize]); });
-document.getElementById('bottomRightGrabTab').addEventListener('mousedown',
-	function () { startResize("nwse-resize", [bottomTabResize]); });
 
 function tabMove(event) {
 	tabPosition[0] += event.movementX * resizeMult;
@@ -287,31 +239,6 @@ window.addEventListener('resize', function () {
 	}
 	document.getElementById('fieldView').style.height = ((window.innerHeight - 60) - screenSize[1]) + "px";
 	document.getElementById('onBotJavaDiv').style.height = window.innerHeight - 50 + "px";
-});
-
-//Scroll Features for Lists
-document.getElementById('textSelection').addEventListener('wheel', function (event) {
-	document.getElementById('textSelection').scrollLeft += (event.deltaY + event.deltaX) * .5;
-	event.preventDefault();
-});
-document.getElementById('textSelection').addEventListener('touchstart', function (event) {
-	touchStart = event.targetTouches[0].clientX;
-});
-document.getElementById('textSelection').addEventListener('touchmove', function (event) {
-	document.getElementById('textSelection').scrollLeft -= event.targetTouches[0].clientX - touchStart;
-	touchStart = event.targetTouches[0].clientX;
-});
-
-document.getElementById('topMenu').addEventListener('wheel', function (event) {
-	document.getElementById('topMenu').scrollLeft += (event.deltaY + event.deltaX) * .5;
-	event.preventDefault();
-});
-document.getElementById('topMenu').addEventListener('touchstart', function (event) {
-	touchStart = event.targetTouches[0].clientX;
-});
-document.getElementById('topMenu').addEventListener('touchmove', function (event) {
-	document.getElementById('topMenu').scrollLeft -= event.targetTouches[0].clientX - touchStart;
-	touchStart = event.targetTouches[0].clientX;
 });
 
 //HowToPopUp Instructions
@@ -617,8 +544,7 @@ function stopHowTo() {
 //---Miscellaneous Functions---
 //Goes through program Modified Check First
 //0 - Back Button, 1 - New Program, 2 - Dropdown, 3 - Switch to Blocks, 4 - Switch to Java
-resultAfterModified = -1;
-nextLoadProgram = "";
+
 function checkModified(nextResult) {
 	if (nextResult == 2) {
 		nextLoadProgram = document.getElementById("programSelect").value;
@@ -1225,4 +1151,101 @@ function openNoviceSolutionCode() {
 	}
 	window.open(
 		link, "_blank");
+}
+
+
+function program_page_script(params) {
+	console.log("peter: program_page_script")
+	//Wait for 3 HttpRequests and then load last saved program
+	settingUp = 4;
+
+	clientToolbox.open('GET', './blocks/toolbox.xml');
+	clientToolbox.onload = function () {
+		var toolboxTxt = clientToolbox.responseText;
+		if (toolboxTxt !== '' && !document.getElementById('toolbox')) {
+			toolboxLoaded(toolboxTxt);
+			
+			//Loads Default Programs and Eventually Last Saved
+			document.getElementById("javaSelect").value = 'BlankLinearOpMode';
+			sampleProgram(false);
+			document.getElementById("blockSelect").value = 'BasicAutoOpMode';
+			sampleProgram(true);
+			setTimeout(displayLastSaved, 100);
+			
+			setTimeout(setupCategories, 250);
+		}
+	}
+	clientToolbox.send();
+
+	updateLoadingText();
+	resizeScreens();
+	
+	document.getElementById('middleSlider').addEventListener('mousedown',
+	function () { startResize("ew-resize", [resizeMiddle]); });
+
+	document.getElementById('rightSlider').addEventListener('mousedown',
+	function () { startResize("ns-resize", [resizeRight]); });
+
+	document.getElementById('multiSlider').addEventListener('mousedown',
+	function () { startResize("move", [resizeMiddle, resizeRight]); });
+
+	
+	document.getElementById('tabMovable').addEventListener('mousedown',
+	function () { startResize("move", [tabMove]); });
+
+	document.getElementById('leftGrabTab').addEventListener('mousedown',
+	function () { startResize("ew-resize", [leftTabResize]); });
+
+	document.getElementById('rightGrabTab').addEventListener('mousedown',
+	function () { startResize("ew-resize", [rightTabResize]); });
+
+	document.getElementById('topGrabTab').addEventListener('mousedown',
+	function () { startResize("ns-resize", [topTabResize]); });
+	document.getElementById('topLeftGrabTab').addEventListener('mousedown',
+	function () { startResize("nwse-resize", [topTabResize]); });
+	document.getElementById('topRightGrabTab').addEventListener('mousedown',
+	function () { startResize("nesw-resize", [topTabResize]); });
+
+	document.getElementById('bottomGrabTab').addEventListener('mousedown',
+	function () { startResize("ns-resize", [bottomTabResize]); });
+	document.getElementById('bottomLeftGrabTab').addEventListener('mousedown',
+	function () { startResize("nesw-resize", [bottomTabResize]); });
+	document.getElementById('bottomRightGrabTab').addEventListener('mousedown',
+	function () { startResize("nwse-resize", [bottomTabResize]); });
+
+
+	
+	//Scroll Features for Lists
+	document.getElementById('textSelection').addEventListener('wheel', function (event) {
+		document.getElementById('textSelection').scrollLeft += (event.deltaY + event.deltaX) * .5;
+		event.preventDefault();
+	});
+	document.getElementById('textSelection').addEventListener('touchstart', function (event) {
+		touchStart = event.targetTouches[0].clientX;
+	});
+	document.getElementById('textSelection').addEventListener('touchmove', function (event) {
+		document.getElementById('textSelection').scrollLeft -= event.targetTouches[0].clientX - touchStart;
+		touchStart = event.targetTouches[0].clientX;
+	});
+
+	document.getElementById('topMenu').addEventListener('wheel', function (event) {
+		document.getElementById('topMenu').scrollLeft += (event.deltaY + event.deltaX) * .5;
+		event.preventDefault();
+	});
+	document.getElementById('topMenu').addEventListener('touchstart', function (event) {
+		touchStart = event.targetTouches[0].clientX;
+	});
+	document.getElementById('topMenu').addEventListener('touchmove', function (event) {
+		document.getElementById('topMenu').scrollLeft -= event.targetTouches[0].clientX - touchStart;
+		touchStart = event.targetTouches[0].clientX;
+	});
+
+	resultAfterModified = -1;
+	nextLoadProgram = "";
+
+
+
+
+
+	
 }

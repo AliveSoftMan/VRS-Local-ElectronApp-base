@@ -179,4 +179,3 @@ return Blockly.Blocks;
 }));
 
 
-//# sourceMappingURL=blocks_compressed.js.map
